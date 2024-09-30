@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-
+from oauth2client.service_account import ServiceAccountCredentials
+from google.auth.transport.requests import Request
+import google.auth
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -157,20 +159,22 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ebatz312@gmail.com'  # Tu correo de Gmail
-EMAIL_HOST_PASSWORD = 'kcgx lbyo gevi elti'  # Tu contraseña de Gmail o contraseña de aplicación
-DEFAULT_FROM_EMAIL = 'ebatz312@gmail.com'
-
+EMAIL_HOST_USER = 'ebatz312@gmail.com'  # Reemplaza con tu correo
+EMAIL_HOST_PASSWORD = 'cgei gati urhq lknh'  # Reemplaza con la contraseña de tu correo o una contraseña de aplicación
+DEFAULT_FROM_EMAIL = 'ebatz312@gmail.com'  # Reemplaza con tu correo
+EMAIL_USE_OAUTH2 = True  # Esta línea indica que usarás OAuth2
 # Si estás trabajando en local, puedes usar 'localhost:8000' o tu dirección de desarrollo
-DEFAULT_DOMAIN = 'localhost:8000'
+DEFAULT_DOMAIN = 'https://pdrh02gj-8000.use2.devtunnels.ms/'
 
 # Configura el protocolo (http para desarrollo, https para producción)
-DEFAULT_PROTOCOL = 'http'
+DEFAULT_PROTOCOL = 'https'
 # Configurar el dominio y protocolo que se usarán para los correos
-PASSWORD_RESET_TIMEOUT_DAYS = 3  # Tiempo que dura el enlace antes de expirar
+PASSWORD_RESET_TIMEOUT = 60 * 60 * 24 * 3  # 3 días en segundos  # Tiempo que dura el enlace antes de expirar
 EMAIL_USE_SSL = False  # Solo si estás usando HTTPS, de lo contrario es False
+
+
