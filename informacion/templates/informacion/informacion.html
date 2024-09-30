@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información Pública</title>
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="{% static 'informacion/css/estilos.css' %}">
+    <link rel="shortcut icon" href="{% static 'inicio/images/favicon.ico' %}" type="image/x-icon">
+</head>
+<body>
+
+<!-- Banner principal -->
+<div class="jumbotron jumbotron-fluid text-white">
+    <div class="container">
+        <img src="{% static 'informacion/images/DMMLOGO.png' %}" alt="Logo DMM" class="logo-left">
+        <h1 class="display-4">Bienvenido a DMM</h1>
+        <p class="lead">Toda la información que necesitas.</p>
+        <img src="{% static 'informacion/images/MUNILOGO.png' %}" alt="Logo Derecho" class="logo-right">
+    </div>
+</div>
+
+<!-- Sección de Botones (Login y Modo Oscuro) -->
+<div class="button-container">
+    <button class="btn btn-login" onclick="window.location.href='/login/'">Login</button>
+    <button class="btn btn-dark-mode" id="dark-mode-toggle">Modo Oscuro</button>
+</div>
+
+<!-- Sección de Misión, Visión y Valores -->
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="{% static 'informacion/images/vision.png' %}" alt="Visión">
+                <div class="card-body">
+                    <h5 class="card-title">Visión</h5>
+                    <p class="card-text">Nuestra visión es crear un entorno eficiente y colaborativo para la gestión de empleados.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="{% static 'informacion/images/mision.png' %}" alt="Misión">
+                <div class="card-body">
+                    <h5 class="card-title">Misión</h5>
+                    <p class="card-text">Nuestro proyecto busca la optimización de procesos a través de una plataforma innovadora.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="{% static 'informacion/images/valores.png' %}" alt="Valores">
+                <div class="card-body">
+                    <h5 class="card-title">Valores</h5>
+                    <p class="card-text">Fomentamos la transparencia, innovación y el compromiso en cada aspecto de nuestro trabajo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Proyectos Realizados -->
+<div class="container my-5">
+    <h2>Proyectos Realizados por la DMM</h2>
+    <p>A continuación, algunos de los proyectos más importantes realizados por la DMM.</p>
+    <div class="row">
+        {% for proyecto in proyectos %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <!-- Inicio del Carrusel -->
+                <div id="carousel-{{ proyecto.id }}" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for imagen in proyecto.imagenes.all %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ imagen.imagen.url }}" alt="{{ proyecto.nombre }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ proyecto.id }}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ proyecto.id }}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                <!-- Fin del Carrusel -->
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{ proyecto.nombre }}</h5>
+                    <p class="card-text">{{ proyecto.descripcion }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<!-- Sección de Tracking de Proyectos -->
+<div class="container my-5">
+    <h2>Tracking de Proyectos en Curso</h2>
+    <p>A continuación, se muestra el estado de los proyectos que se están llevando a cabo actualmente:</p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre del Proyecto</th>
+                <th>Estado</th>
+                <th>Inicio</th>
+                <th>Fecha Estimada de Finalización</th>
+                <th>Avance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proyecto in tracking_proyectos %}
+            <tr>
+                <td>{{ proyecto.nombre }}</td>
+                <td>{{ proyecto.estado }}</td>
+                <td>{{ proyecto.inicio }}</td>
+                <td>{{ proyecto.fin_estimado }}</td>
+                <td>{{ proyecto.avance }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Sección de Contacto -->
+<div class="container my-5">
+    <h2>Contacto</h2>
+    <p>Para más información sobre el proyecto, puedes contactarnos a través de los siguientes medios:</p>
+    <ul>
+        <li>Email: contacto@dmm.com</li>
+        <li>Teléfono: +502 30670413</li>
+        <li>Dirección: Totonicapán </li>
+    </ul>
+</div>
+
+<!-- Bootstrap y jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- JavaScript personalizado -->
+<script src="{% static 'informacion/js/script.js' %}"></script>
+
+</body>
+</html>

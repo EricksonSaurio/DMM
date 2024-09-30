@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Inicio{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'inicio/css/estilos.css' %}">
+</head>
+<body>
+
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="bg-dark">
+        <div class="sidebar-header">
+            <h3>Menú</h3>
+        </div>
+        <ul class="list-unstyled components">
+            {% block sidebar %}
+            <!-- Aquí se incluirán los menús específicos de los roles -->
+            {% endblock %}
+        </ul>
+    </nav>
+
+    <!-- Contenido de la Página -->
+    <div id="content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>Menú</span>
+                </button>
+            </div>
+        </nav>
+        
+        <div class="container mt-5">
+            {% block content %}
+            <!-- Aquí se cargará el contenido de cada página -->
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="{% static 'inicio/js/scripts.js' %}"></script>
+
+</body>
+</html>

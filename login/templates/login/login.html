@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+
+    {% load static %}
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Estilos específicos -->
+    <link rel="stylesheet" href="{% static 'login/css/estilos.css' %}">
+    <link rel="shortcut icon" href="{% static 'inicio/images/favicon.ico' %}" type="image/x-icon">
+</head>
+<body class="bg-light">
+    <div class="container d-flex align-items-center justify-content-center min-vh-100"
+         data-success="{% if success %}true{% else %}false{% endif %}"
+         data-error-message="{{ error|default_if_none:'' }}">
+        <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <img src="{% static 'login/images/DMMLOGO.png' %}" alt="Logo" class="logo" style="max-width: 100px;">
+                </div>
+                <h3 class="text-center mb-4">Iniciar Sesión</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Nombre de Usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="mostrarPassword">
+                        <label class="form-check-label" for="mostrarPassword">Mostrar contraseña</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="{% url 'password_reset' %}" class="text-muted">¿Olvidaste tu contraseña?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery y Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- FontAwesome para iconos -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Scripts específicos -->
+    <script src="{% static 'login/js/scripts.js' %}"></script>
+</body>
+</html>

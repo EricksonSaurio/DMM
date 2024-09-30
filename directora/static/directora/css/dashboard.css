@@ -1,0 +1,47 @@
+/* dashboard.css */
+h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.card {
+    border: 1px solid #ced4da;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 20px;
+    color: #333;
+}
+
+.btn-primary {
+    background-color: #28a745;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border: none;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.text-center {
+    text-align: center;
+}

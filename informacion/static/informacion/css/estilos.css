@@ -1,0 +1,139 @@
+/* Estilo General del Contenedor */
+.container {
+    max-width: 960px;
+    position: relative; /* Necesario para posicionar logos absolutamente */
+}
+
+/* Jumbotron (Banner Principal) */
+.jumbotron {
+    background: #E1BEE7; /* Morado claro */
+    color: #4A148C; /* Morado oscuro */
+    padding: 5rem 1rem; /* Ajusta este valor si es necesario */
+    text-align: center;
+    position: relative; /* Importante para posicionamiento absoluto de logos */
+}
+
+/* Texto del Banner */
+.jumbotron h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    padding: 0 10px; /* Menos padding para permitir más espacio en dispositivos pequeños */
+    text-shadow: 2px 2px 4px #6A1B9A; /* Sombra morado oscuro */
+}
+
+.jumbotron p {
+    font-size: 1.5rem;
+    font-family: 'Arial', sans-serif;
+    padding: 0 10px; /* Consistente con el padding del título */
+}
+
+/* Logos en el Banner */
+.logo-left, .logo-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 80px; /* Ajusta según necesidades, más pequeños para móviles */
+    height: auto;
+    z-index: 1; /* Logos debajo del texto */
+}
+
+.logo-left {
+    left: 10px; /* Menos espacio desde el borde para dispositivos móviles */
+}
+
+.logo-right {
+    right: 10px; /* Menos espacio desde el borde para dispositivos móviles */
+}
+
+@media (max-width: 768px) {
+    /* En pantallas pequeñas, reduce aún más el tamaño de los logos */
+    .logo-left, .logo-right {
+        width: 60px; /* Logos aún más pequeños en dispositivos móviles */
+    }
+
+    /* Ajusta el padding del texto para asegurar visibilidad y no superposición */
+    .jumbotron h1, .jumbotron p {
+        padding: 0 20px; /* Un poco más de espacio a los lados */
+    }
+}
+
+/* Contenedor de los botones fuera del Jumbotron */
+.button-container {
+    text-align: center; /* Centrado horizontalmente */
+    margin: 20px 0; /* Espacio antes y después del contenedor de botones */
+}
+
+/* Botones estilizados para ambos modos */
+.btn-login, .btn-dark-mode {
+    background-color: #8E24AA; /* Morado fuerte */
+    color: #FFFFFF; /* Texto blanco */
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    margin-right: 10px; /* Espacio entre botones */
+}
+
+.btn-login:hover, .btn-dark-mode:hover {
+    background-color: #6A1B9A; /* Morado oscuro al pasar el mouse */
+}
+
+/* Estilos de las Tarjetas (Cards) */
+.card-body {
+    text-align: center;
+    background-color: #F3E5F5; /* Morado muy claro */
+    color: #4A148C;
+}
+
+.card-body h5, .card-body p {
+    color: #4A148C; /* Morado oscuro */
+}
+
+/* Estilos para Títulos y Párrafos */
+h2 {
+    color: #8E24AA; /* Morado fuerte */
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.1em;
+    color: #4A148C; /* Morado oscuro */
+}
+
+/* Estilos para la tabla de Tracking */
+.table {
+    margin-top: 30px;
+    border: 2px solid #F3E5F5; /* Morado muy claro */
+}
+
+.table th, .table td {
+    background-color: #FFFFFF;
+    color: #4A148C;
+}
+
+/* Listas */
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #4A148C; /* Morado oscuro */
+}
+
+/* Modo Oscuro: Solo el fondo negro */
+body.dark-mode {
+    background-color:  #1e1e1e;
+}
+
+.jumbotron.dark-mode {
+    /*background-color: #1A237E; /* Fondo del banner azul muy oscuro */
+   
+    color: #FFFFFF; /* Texto claro para contraste */
+}

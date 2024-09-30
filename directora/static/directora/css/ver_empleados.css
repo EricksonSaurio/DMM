@@ -1,0 +1,52 @@
+/* Estilos generales para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Modo claro */
+body.light-mode {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+body.light-mode table {
+    background-color: #f9f9f9;
+    color: #000000;
+}
+
+body.light-mode th {
+    background-color: #f1f1f1;
+    color: #000000;
+}
+
+/* Modo oscuro */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark-mode table {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+body.dark-mode th {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+/* Alternar filas */
+tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.1);
+}

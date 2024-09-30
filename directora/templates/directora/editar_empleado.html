@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Empleado</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="{% static 'inicio/images/favicon.ico' %}" type="image/x-icon">
+</head>
+<body>
+    <h1>Editar Empleado</h1>
+    <form action="/eliminar_empleado" method="POST">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div>
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required>
+        </div>
+        <div>
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" required>
+        </div>
+        <div>
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" required>
+        </div>
+        <div>
+            <label for="puesto">Puesto:</label>
+            <input type="text" id="puesto" name="puesto" required>
+        </div>
+        <div>
+            <button type="submit">Guardar Cambios</button>
+        </div>
+    </form>
+</body>
+</html>

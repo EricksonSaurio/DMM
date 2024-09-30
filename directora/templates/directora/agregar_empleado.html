@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Empleado</title>
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="{% static 'directora/css/estilos.css' %}">
+    <link rel="shortcut icon" href="{% static 'inicio/images/favicon.ico' %}" type="image/x-icon">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'inicio' %}">
+            <img src="{% static 'inicio/images/DMMLOGO.png' %}" alt="Logo" style="height: 50px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if rol == 'Directora' %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'empleados' %}">Empleados</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_proyectos' %}">Dashboard Directora</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'menu_gestion_proyectos' %}">Gestión de Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
+                {% elif rol == 'Asistente' %}
+                    <li class="nav-item"><a class="nav-link" href="#">Asistencia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Documentos</a></li>
+                {% elif rol == 'Técnica de Campo' %}
+                    <li class="nav-item"><a class="nav-link" href="#">Campo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Informes</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="#">Menú por Defecto</a></li>
+                {% endif %}
+                <!-- Botón de Cerrar Sesión -->
+                <li class="nav-item">
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger ml-2">Cerrar Sesión</button>
+                    </form>
+                </li>
+                <!-- Modo Oscuro Toggle Switch -->
+                <li class="nav-item ml-3">
+                    <div class="custom-switch">
+                        <input type="checkbox" id="darkModeSwitch" class="toggle-switch">
+                        <label for="darkModeSwitch" class="switch-label">Modo Oscuro</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+<div class="container">
+    <div class="form-container">
+        <h3 class="text-center">Añadir Empleado</h3>
+
+        <!-- Mostrar mensajes de Django (éxito o error) -->
+        {% for message in messages %}
+            <div class="django-message" data-tag="{{ message.tags }}" style="display: none;">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <form method="POST" id="empleadoForm">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                {{ form.nombre }}
+                <div class="error-message" id="error-nombre"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                {{ form.apellido }}
+                <div class="error-message" id="error-apellido"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo:</label>
+                {{ form.correo }}
+                <div class="error-message" id="error-correo"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono:</label>
+                {{ form.telefono }}
+                <div class="error-message" id="error-telefono"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="departamento">Departamento:</label>
+                {{ form.departamento }}
+                <div class="error-message" id="error-departamento"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha_contratacion">Fecha de Contratación:</label>
+                {{ form.fecha_contratacion }}
+                <div class="error-message" id="error-fecha"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="dpi">DPI:</label>
+                {{ form.dpi }}
+                <div class="error-message" id="error-dpi"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Añadir Empleado</button>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap y jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Scripts personalizados -->
+<script src="{% static 'directora/js/empleado.js' %}"></script>
+<script src="{% static 'directora/js/sweetalert.js' %}"></script>
+<script src="{% static 'inicio/js/scripts.js' %}"></script>
+
+</body>
+</html>

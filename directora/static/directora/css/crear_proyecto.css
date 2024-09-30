@@ -1,0 +1,162 @@
+body.light-mode {
+    background-color: #ffffff; /* Color crema suave */
+    color: #333333; /* Texto más oscuro para mejor contraste */
+}
+
+body.dark-mode {
+    background-color: #1e1e1e; /* Oscuro como está */
+    color: #f8f9fa; /* Texto claro */
+}
+
+/* Navbar Estilos */
+.navbar {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar.bg-light {
+    background-color: #e2f0db;
+    border-bottom: 2px solid rgb(161, 232, 221); /* Morado fuerte para el borde */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .navbar {
+    background-color: #343a40; /* Manteniendo los colores originales para modo oscuro */
+    border-bottom: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.nav-link {
+    transition: color 0.3s;
+}
+
+body.light-mode .nav-link {
+    color: #800080; /* Morado fuerte para el texto */
+}
+
+body.dark-mode .nav-link {
+    color: #f8f9fa;
+}
+
+body.dark-mode .nav-link:hover {
+    color: #adb5bd; /* Gris para hover */
+}
+
+body.light-mode .btn-danger {
+    background-color: #FF0000; /* Rojo fuerte */
+    border-color: #FF0000;
+}
+
+body.dark-mode .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Toggle Switch Styling */
+.custom-switch {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-switch {
+    width: 40px;
+    height: 20px;
+    position: relative;
+    appearance: none;
+    background-color: #ccc;
+    outline: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toggle-switch:checked {
+    background-color: #1c0080; /* Morado fuerte */
+}
+
+.toggle-switch::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.toggle-switch:checked::before {
+    transform: translateX(20px);
+}
+
+.switch-label {
+    margin-left: 8px;
+    font-weight: 500;
+    color: #333; /* Texto oscuro para modo claro */
+    font-size: 0.9rem;
+}
+
+body.dark-mode .switch-label {
+    color: #f8f9fa;
+}
+
+/* Estilo General del Contenedor del Formulario */
+.container {
+    max-width: 600px; /* Limita el ancho del formulario */
+    margin: auto; /* Centrado horizontal */
+    background: #f9f9f9; /* Fondo claro */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave */
+}
+
+/* Estilo de los campos del formulario */
+input, select, textarea {
+    width: 100%; /* Aprovecha todo el ancho */
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc; /* Borde sutil */
+    box-sizing: border-box; /* Incluye padding y border en el width */
+}
+
+/* Botón del formulario */
+.btn-success {
+    width: 100%; /* Aprovecha todo el ancho */
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745; /* Verde Bootstrap */
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Verde oscuro al pasar el mouse */
+}
+
+
+
+/* Título centrado */
+h2 {
+    color: #333;
+    padding: 20px 0;
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea,
+body.dark-mode label { /* Asegúrate de incluir los labels aquí */
+    color: #070707; /* Texto blanco */
+}
+
+
+.is-invalid {
+    border-color: red;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    display: none;
+}
+

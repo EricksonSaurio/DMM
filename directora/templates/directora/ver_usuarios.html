@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Usuarios</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'directora/css/estilos.css' %}">
+    <link rel="stylesheet" href="{% static 'directora/css/ver_empleados.css' %}">
+    <link rel="shortcut icon" href="{% static 'inicio/images/favicon.ico' %}" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{% url 'inicio' %}">
+                <img src="{% static 'inicio/images/DMMLOGO.png' %}" alt="Logo" style="height: 50px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    {% if rol == 'Directora' %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'empleados' %}">Empleados</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_proyectos' %}">Dashboard Directora</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'menu_gestion_proyectos' %}">Gestión de Proyectos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
+                    {% elif rol == 'Asistente' %}
+                        <li class="nav-item"><a class="nav-link" href="#">Asistencia</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Documentos</a></li>
+                    {% elif rol == 'Técnica de Campo' %}
+                        <li class="nav-item"><a class="nav-link" href="#">Campo</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Informes</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="#">Menú por Defecto</a></li>
+                    {% endif %}
+                    <!-- Botón de Cerrar Sesión -->
+                    <li class="nav-item">
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger ml-2">Cerrar Sesión</button>
+                        </form>
+                    </li>
+                    <!-- Modo Oscuro Toggle Switch -->
+                    <li class="nav-item ml-3">
+                        <div class="custom-switch">
+                            <input type="checkbox" id="darkModeSwitch" class="toggle-switch">
+                            <label for="darkModeSwitch" class="switch-label">Modo Oscuro</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="container mt-5">
+        <h2>Lista de Usuarios</h2>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre de Usuario</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>
+                        <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-primary">Editar</a>
+                        <a href="{% url 'eliminar_usuario' usuario.id %}" class="btn btn-danger" onclick="return confirm('¿Estás seguro de querer eliminar este usuario?');">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'empleados' %}" class="btn btn-secondary">Regresar</a>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'inicio/js/scripts.js' %}"></script>
+</body>
+</html>
