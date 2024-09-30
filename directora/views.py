@@ -184,19 +184,28 @@ def ver_usuarios(request):
     usuarios = User.objects.all()  # Obtiene todos los usuarios
     return render(request, 'directora/ver_usuarios.html', {'usuarios': usuarios, 'rol': rol})
 
-
 @login_required
 def editar_usuario(request, user_id):
     rol = obtener_rol(request.user)
     user = get_object_or_404(User, pk=user_id)
+
+    try:
+        # Intenta obtener el empleado relacionado con el correo del usuario
+        empleado = Empleado.objects.get(correo=user.email)
+    except Empleado.DoesNotExist:
+        empleado = None
+
     if request.method == 'POST':
         form = UsuarioEmpleadoForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
             return redirect('ver_usuarios')
     else:
-        form = UsuarioEmpleadoForm(instance=user)
-    return render(request, 'directora/editar_usuario.html', {'form': form, 'user_id': user_id, 'rol': rol})
+        # Si existe el empleado, lo pasamos como valor inicial del campo 'empleado'
+        initial_data = {'empleado': empleado}
+        form = UsuarioEmpleadoForm(instance=user, initial=initial_data)
+
+    return render(request, 'directora/editar_usuario.html', {'form': form, 'user_id': user_id, 'rol': rol, 'empleado': empleado})
 
 
 def eliminar_usuario(request, user_id):
