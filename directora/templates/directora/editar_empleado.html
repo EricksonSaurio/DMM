@@ -6,8 +6,7 @@
     <title>Editar Empleado</title>
     {% load static %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'directora/css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'directora/css/ver_empleados.css' %}">
+    <link rel="stylesheet" href="{% static 'directora/css/estilos.css' %}">
     <link rel="shortcut icon" href="{% static 'inicio/images/favicon.ico' %}" type="image/x-icon">
 </head>
 <body>
@@ -83,6 +82,9 @@
         </div>
         <div>
             <button type="submit">Guardar Cambios</button>
+        </div>
+        <div>
+            <a href="{% url 'empleados' %}">Regresar</a>
         </div>
     </form>
 </body>
