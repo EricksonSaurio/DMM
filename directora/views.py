@@ -18,6 +18,10 @@ from .models import Proyecto
 from directora.models import Empleado
 from .forms import EmpleadoForm
 from django.http import JsonResponse
+from django.contrib import messages
+from .models import Tarea
+from django.core.mail import send_mail
+from .models import Notificacion
 
 def obtener_rol(user):
     if user.groups.filter(name='Directora').exists():
@@ -340,3 +344,45 @@ def exportar_proyectos_excel_con_grafico(request):
     wb.save(response)
     return response
 
+def asignar_tarea(request):
+    if request.method == 'POST':
+        titulo = request.POST.get('titulo')
+        descripcion = request.POST.get('descripcion')
+        fecha_limite = request.POST.get('fecha_limite')
+        empleado_id = request.POST.get('empleado')
+        empleado = User.objects.get(id=empleado_id)
+
+        tarea = Tarea.objects.create(
+            titulo=titulo,
+            descripcion=descripcion,
+            fecha_limite=fecha_limite,
+            asignada_a=empleado
+        )
+
+        # Enviar notificación por correo
+        enviar_notificacion_correo(empleado.email, tarea)
+
+        messages.success(request, f'Tarea "{titulo}" asignada correctamente a {empleado.username}')
+
+        return redirect('listar_tareas.html')
+
+    empleados = User.objects.filter(groups__name__in=['Asistente', 'Técnica de Campo'])
+    return render(request, 'directora/asignar_tarea.html', {'empleados': empleados})
+
+def mostrar_notificaciones(request):
+    notificaciones = Notificacion.objects.filter(usuario=request.user, leida=False)
+    return render(request, 'directora/notificaciones.html', {'notificaciones': notificaciones})
+
+from django.conf import settings
+
+
+def enviar_notificacion_correo(correo, tarea):
+    asunto = f'Nueva tarea asignada: {tarea.titulo}'
+    mensaje = f'Hola,\n\nSe te ha asignado una nueva tarea: {tarea.titulo}\nDescripción: {tarea.descripcion}\nFecha límite: {tarea.fecha_limite}\n\nSaludos,\nEquipo DMM'
+    email_desde = settings.DEFAULT_FROM_EMAIL
+    send_mail(asunto, mensaje, email_desde, [correo])
+
+@login_required
+def listar_tareas(request):
+    tareas = Tarea.objects.filter(asignada_a=request.user).order_by('fecha_limite')  # Solo las tareas asignadas al usuario actual
+    return render(request, 'directora/listar_tareas.html', {'tareas': tareas})

@@ -71,3 +71,20 @@ def dashboard_proyectos(request):
         'proyectos_en_progreso': proyectos_en_progreso,
         'proyectos_terminados': proyectos_terminados
     })
+
+class Tarea(models.Model):
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField()
+    fecha_limite = models.DateField()
+    asignada_a = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tareas_asignadas')
+    completada = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.titulo
+    
+class Notificacion(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    mensaje = models.TextField()
+    leida = models.BooleanField(default=False)
+    fecha = models.DateTimeField(auto_now_add=True)
