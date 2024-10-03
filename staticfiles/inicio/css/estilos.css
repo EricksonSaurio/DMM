@@ -1,0 +1,136 @@
+/* General Styles for Light and Dark Mode */
+body.light-mode {
+    background-color: #ffffff; /* Color crema suave */
+    color: #333333; /* Texto más oscuro para mejor contraste */
+}
+
+body.dark-mode {
+    background-color: #1e1e1e; /* Oscuro como está */
+    color: #f8f9fa; /* Texto claro */
+}
+
+/* Navbar Estilos */
+.navbar {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.light-mode .navbar {
+    background-color: #e2f0db; 
+    border-bottom: 2px solid rgb(161, 232, 221); 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .navbar {
+    background-color: #343a40; /* Manteniendo los colores originales para modo oscuro */
+    border-bottom: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.nav-link {
+    transition: color 0.3s;
+}
+
+body.light-mode .nav-link {
+    color: #800080; /* Morado fuerte para el texto */
+}
+
+body.dark-mode .nav-link {
+    color: #f8f9fa;
+}
+
+body.dark-mode .nav-link:hover {
+    color: #adb5bd; /* Gris para hover */
+}
+
+body.light-mode .btn-danger {
+    background-color: #FF0000; /* Rojo fuerte */
+    border-color: #FF0000;
+}
+
+body.dark-mode .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Toggle Switch Styling */
+.custom-switch {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-switch {
+    width: 40px;
+    height: 20px;
+    position: relative;
+    appearance: none;
+    background-color: #ccc;
+    outline: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toggle-switch:checked {
+    background-color: #1c0080; /* Morado fuerte */
+}
+
+.toggle-switch::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.toggle-switch:checked::before {
+    transform: translateX(20px);
+}
+
+.switch-label {
+    margin-left: 8px;
+    font-weight: 500;
+    color: #333; /* Texto oscuro para modo claro */
+    font-size: 0.9rem;
+}
+
+body.dark-mode .switch-label {
+    color: #f8f9fa;
+}
+
+/* Jumbotron */
+.jumbotron {
+    padding: 2rem 1rem;
+    background-color: #b8b6b6; /* Morado claro */
+    border-radius: .3rem;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .jumbotron {
+    background-color: #495057;
+}
+
+/* Modo Claro */
+body.light-mode .card {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #dddddd;
+}
+
+body.light-mode .card a.btn {
+    color: #ffffff;
+}
+
+/* Modo Oscuro */
+body.dark-mode .card {
+    background-color: #2c2c2c;
+    color: #f5f5f5;
+    border: 1px solid #444444;
+}
+
+body.dark-mode .card a.btn {
+    color: #ffffff;
+}

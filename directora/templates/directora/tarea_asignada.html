@@ -1,0 +1,81 @@
+<!-- templates/emails/asignar_tarea.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Tarea Asignada</title>
+    <style>
+        /* Estilos básicos para el correo */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #ff6f61;
+            padding: 20px;
+            text-align: center;
+        }
+        .header img {
+            max-width: 150px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content h2 {
+            color: #333333;
+        }
+        .content p {
+            color: #555555;
+            line-height: 1.6;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+            color: #777777;
+            font-size: 12px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <img src="{{ logo_url }}" alt="Gestión DMM">
+        </div>
+        <div class="content">
+            <h2>Hola, {{ empleado.nombre }} {{empleado.apellido}}!</h2>
+            <p>Se te ha asignado una nueva tarea:</p>
+            <p><strong>Título:</strong> {{ tarea.titulo }}</p>
+            <p><strong>Descripción:</strong> {{ tarea.descripcion }}</p>
+            <p><strong>Fecha Límite:</strong> {{ tarea.fecha_limite }}</p>
+            <a href="{{ dashboard_url }}" class="button">Ver Tarea</a>
+        </div>
+        <div class="footer">
+            &copy; 2024 Gestión DMM. Todos los derechos reservados.
+        </div>
+    </div>
+</body>
+</html>
+

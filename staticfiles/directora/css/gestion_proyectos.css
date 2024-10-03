@@ -1,0 +1,60 @@
+/* Estilo para las cards de proyectos */
+.card {
+    border: 1px solid #e3e6f0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.card-footer {
+    background-color: #f8f9fc;
+}
+
+.card-title {
+    font-size: 18px;
+    color: #4a4a4a;
+}
+
+/* Personalizar botones */
+.btn-warning {
+    background-color: #f0ad4e;
+    border-color: #f0ad4e;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.nav-link {
+    transition: color 0.3s;
+}
+
+/* Light Mode Navbar Links */
+body.light-mode .nav-link {
+    color: #800080; /* Strong purple text */
+}
+
+/* Dark Mode Navbar Links */
+body.dark-mode .nav-link {
+    color: #f8f9fa;
+}
+
+/* Dark Mode Navbar Link Hover */
+body.dark-mode .nav-link:hover {
+    color: #adb5bd; /* Gray on hover */
+}
+
+/* ===========================
+   Danger Button Styles
+   =========================== */
+/* Light Mode Danger Button */
+body.light-mode .btn-danger {
+    background-color: #FF0000; /* Strong red */
+    border-color: #FF0000;
+}
+
+/* Dark Mode Danger Button */
+body.dark-mode .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}

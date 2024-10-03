@@ -67,11 +67,11 @@
 
                         <div class="mb-3">
                             <label for="empleado" class="form-label">Asignar a</label>
-                            <select class="form-control" id="empleado" name="empleado" required>
+                            <select name="empleado" class="form-control">
                                 {% for empleado in empleados %}
-                                    <option value="{{ empleado.id }}">{{ empleado.username }}</option>
+                                    <option value="{{ empleado.id }}">{{ empleado.nombre }} {{ empleado.apellido }}</option>
                                 {% endfor %}
-                            </select>
+                            </select>                            
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">Asignar Tarea</button>

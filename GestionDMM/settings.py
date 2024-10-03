@@ -40,10 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'login',
     'inicio',
     'directora',
     'informacion',
+
 ]
 
 MIDDLEWARE = [
@@ -133,10 +135,6 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
-
-
-
-
 # Configuración de archivos estáticos
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -176,5 +174,7 @@ DEFAULT_PROTOCOL = 'https'
 # Configurar el dominio y protocolo que se usarán para los correos
 PASSWORD_RESET_TIMEOUT = 60 * 60 * 24 * 3  # 3 días en segundos  # Tiempo que dura el enlace antes de expirar
 EMAIL_USE_SSL = False  # Solo si estás usando HTTPS, de lo contrario es False
+
+SITE_ID = 1
 
 

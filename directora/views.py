@@ -22,6 +22,14 @@ from django.contrib import messages
 from .models import Tarea
 from django.core.mail import send_mail
 from .models import Notificacion
+from premailer import transform
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.contrib.sites.models import Site
+from premailer import Premailer
+import os
+from django.conf import settings
+from .models import Tarea, Empleado, PerfilUsuario
 
 def obtener_rol(user):
     if user.groups.filter(name='Directora').exists():
@@ -42,19 +50,27 @@ def empleados(request):
 # Vista para agregar un empleado
 @login_required
 def agregar_empleado(request):
+    # Obtiene el rol del usuario actual
     rol = obtener_rol(request.user)
     
     if request.method == 'POST':
+        # Si el método de la solicitud es POST, crea un formulario con los datos enviados
         form = EmpleadoForm(request.POST)
         if form.is_valid():
+            # Si el formulario es válido, guarda el nuevo empleado
             form.save()
+            # Muestra un mensaje de éxito
             messages.success(request, 'Empleado agregado exitosamente.')
+            # Redirige a la misma vista para evitar re-envío del formulario
             return redirect('agregar_empleado')
         else:
+            # Si el formulario no es válido, muestra un mensaje de error
             messages.error(request, 'Ocurrió un error al agregar el empleado.')
     else:
+        # Si el método de la solicitud no es POST, crea un formulario vacío
         form = EmpleadoForm()
 
+    # Renderiza la plantilla 'agregar_empleado.html' con el formulario y el rol del usuario
     return render(request, 'directora/agregar_empleado.html', {'form': form, 'rol': rol})
 
 @login_required
@@ -65,32 +81,50 @@ def ver_empleados(request):
 
 @login_required
 def editar_empleado(request, empleado_id):
+    # Obtiene el rol del usuario actual
     rol = obtener_rol(request.user)
+    
+    # Obtiene el empleado a editar o devuelve un error 404 si no existe
     empleado = get_object_or_404(Empleado, id=empleado_id)
     
     if request.method == 'POST':
+        # Si el método de la solicitud es POST, crea un formulario con los datos enviados y el empleado existente
         form = EmpleadoForm(request.POST, instance=empleado)
         if form.is_valid():
+            # Si el formulario es válido, guarda los cambios en el empleado
             form.save()
+            # Muestra un mensaje de éxito
             messages.success(request, 'Empleado actualizado exitosamente.')
+            # Redirige a la vista de ver empleados
             return redirect('ver_empleados')
         else:
+            # Si el formulario no es válido, muestra un mensaje de error
             messages.error(request, 'Ocurrió un error al actualizar el empleado.')
     else:
+        # Si el método de la solicitud no es POST, crea un formulario con los datos del empleado existente
         form = EmpleadoForm(instance=empleado)
     
+    # Renderiza la plantilla 'editar_empleado.html' con el formulario, el rol del usuario y los datos del empleado
     return render(request, 'directora/editar_empleado.html', {'form': form, 'rol': rol, 'empleado': empleado})
 
+# Vista para eliminar un empleado
 @login_required
 def eliminar_empleado(request, empleado_id):
+    # Obtiene el rol del usuario actual
     rol = obtener_rol(request.user)
+    
+    # Obtiene el empleado a eliminar o devuelve un error 404 si no existe
     empleado = get_object_or_404(Empleado, id=empleado_id)
     
     if request.method == 'POST':
+        # Si el método de la solicitud es POST, elimina el empleado
         empleado.delete()
+        # Muestra un mensaje de éxito
         messages.success(request, 'Empleado eliminado exitosamente.')
+        # Redirige a la vista de ver empleados
         return redirect('ver_empleados')
     
+    # Renderiza la plantilla 'eliminar_empleado.html' con los datos del empleado y el rol del usuario
     return render(request, 'directora/eliminar_empleado.html', {'empleado': empleado, 'rol': rol})
 
 @login_required
@@ -230,15 +264,19 @@ def listar_usuarios(request):
 
 @login_required
 def informe_usuarios(request):
+    # Obtiene el rol del usuario actual
     rol = obtener_rol(request.user)
     
-    # Usuarios más recientes
-    usuarios_recientes = User.objects.all().order_by('-date_joined')[:10]  # Últimos 10 usuarios creados
-    # Usuarios más antiguos
-    usuarios_antiguos = User.objects.all().order_by('date_joined')[:10]  # Primeros 10 usuarios creados
-    # Usuarios eliminados (si se ha implementado)
+    # Obtiene los 10 usuarios más recientes, ordenados por la fecha de creación en orden descendente
+    usuarios_recientes = User.objects.all().order_by('-date_joined')[:10]
+    
+    # Obtiene los 10 usuarios más antiguos, ordenados por la fecha de creación en orden ascendente
+    usuarios_antiguos = User.objects.all().order_by('date_joined')[:10]
+    
+    # Obtiene los 10 usuarios eliminados más recientes, ordenados por la fecha de eliminación en orden descendente
     usuarios_eliminados = UsuarioEliminado.objects.all().order_by('-fecha_eliminacion')[:10]
 
+    # Renderiza la plantilla 'informe_usuarios.html' con los datos de los usuarios y el rol del usuario
     return render(request, 'directora/informe_usuarios.html', {
         'usuarios_recientes': usuarios_recientes,
         'usuarios_antiguos': usuarios_antiguos,
@@ -255,11 +293,15 @@ def get_empleado_email(request, empleado_id):
 
 @login_required
 def dashboard_proyectos(request):
+    # Obtiene el rol del usuario actual
     rol = obtener_rol(request.user)
+    
+    # Cuenta los proyectos en diferentes estados
     proyectos_pendientes = Proyecto.objects.filter(estado='pendiente').count()
     proyectos_en_progreso = Proyecto.objects.filter(estado='en_progreso').count()
     proyectos_terminados = Proyecto.objects.filter(estado='completado').count()
     
+    # Prepara el contexto para la plantilla
     context = {
         'proyectos_pendientes': proyectos_pendientes,
         'proyectos_en_progreso': proyectos_en_progreso,
@@ -267,6 +309,7 @@ def dashboard_proyectos(request):
         'rol': rol
     }
     
+    # Renderiza la plantilla 'dashboard_proyectos.html' con el contexto
     return render(request, 'directora/dashboard_proyectos.html', context)
 
 
@@ -299,13 +342,17 @@ def exportar_proyectos_excel(request):
     return response
 
 
-
+@login_required
 def exportar_proyectos_excel_con_grafico(request):
+    # Obtener el rol del usuario actual
+    rol = obtener_rol(request.user)
+
+    # Crear un nuevo libro de Excel
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = 'Proyectos'
 
-    # Encabezados
+    # Agregar los encabezados a la hoja de cálculo
     ws.append(['Estado', 'Pendientes', 'En Progreso', 'Completados'])
 
     # Obtener los datos del gráfico
@@ -322,13 +369,13 @@ def exportar_proyectos_excel_con_grafico(request):
     chart.x_axis.title = "Estado"
     chart.y_axis.title = "Número de Proyectos"
 
-    # Rango de datos para el gráfico
+    # Definir el rango de datos para el gráfico
     data = Reference(ws, min_col=2, min_row=1, max_row=2, max_col=4)  # Cada columna es una serie
     categories = Reference(ws, min_col=1, min_row=2, max_row=2)  # Categoría (nombre de los estados)
     chart.add_data(data, titles_from_data=True)
     chart.set_categories(categories)
 
-    # Colores personalizados para cada serie (estado)
+    # Definir colores personalizados para cada serie (estado)
     colors = ["FF0000", "0000FF", "00FF00"]  # Rojo, Azul, Verde
     for i, serie in enumerate(chart.series):
         serie.graphicalProperties.solidFill = colors[i]
@@ -350,39 +397,83 @@ def asignar_tarea(request):
         descripcion = request.POST.get('descripcion')
         fecha_limite = request.POST.get('fecha_limite')
         empleado_id = request.POST.get('empleado')
-        empleado = User.objects.get(id=empleado_id)
 
-        tarea = Tarea.objects.create(
-            titulo=titulo,
-            descripcion=descripcion,
-            fecha_limite=fecha_limite,
-            asignada_a=empleado
-        )
+        try:
+            # Obtener el empleado seleccionado
+            empleado = Empleado.objects.get(id=empleado_id)
+            # Obtener el perfil de usuario asociado al empleado
+            perfil = PerfilUsuario.objects.get(empleado=empleado)
 
-        # Enviar notificación por correo
-        enviar_notificacion_correo(empleado.email, tarea)
+            # Crear la tarea y asignarla al usuario relacionado
+            tarea = Tarea.objects.create(
+                titulo=titulo,
+                descripcion=descripcion,
+                fecha_limite=fecha_limite,
+                asignada_a=perfil.user  # Asegurar que la tarea se asigna al usuario
+            )
 
-        messages.success(request, f'Tarea "{titulo}" asignada correctamente a {empleado.username}')
+            # Llamar a la función para enviar el correo
+            enviar_notificacion_correo(empleado, tarea)
 
-        return redirect('listar_tareas.html')
+            # Notificaciones o mensajes
+            messages.success(request, f'Tarea "{titulo}" asignada correctamente a {empleado.nombre} {empleado.apellido}')
+            return redirect('dashboard_directora')
 
-    empleados = User.objects.filter(groups__name__in=['Asistente', 'Técnica de Campo'])
+        except Empleado.DoesNotExist:
+            messages.error(request, 'El empleado seleccionado no existe.')
+        except PerfilUsuario.DoesNotExist:
+            messages.error(request, 'No se encontró un perfil de usuario para el empleado seleccionado.')
+
+    empleados = Empleado.objects.all()  # Lista de empleados
     return render(request, 'directora/asignar_tarea.html', {'empleados': empleados})
+
 
 def mostrar_notificaciones(request):
     notificaciones = Notificacion.objects.filter(usuario=request.user, leida=False)
     return render(request, 'directora/notificaciones.html', {'notificaciones': notificaciones})
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.contrib.sites.models import Site
 from django.conf import settings
-
-
-def enviar_notificacion_correo(correo, tarea):
-    asunto = f'Nueva tarea asignada: {tarea.titulo}'
-    mensaje = f'Hola,\n\nSe te ha asignado una nueva tarea: {tarea.titulo}\nDescripción: {tarea.descripcion}\nFecha límite: {tarea.fecha_limite}\n\nSaludos,\nEquipo DMM'
-    email_desde = settings.DEFAULT_FROM_EMAIL
-    send_mail(asunto, mensaje, email_desde, [correo])
+from .models import PerfilUsuario
 
 @login_required
+def enviar_notificacion_correo(request, empleado, tarea):
+    rol = obtener_rol(request.user)
+    subject = f'Nueva tarea asignada: {tarea.titulo}'
+    from_email = settings.DEFAULT_FROM_EMAIL
+
+    # Obtener el usuario relacionado con el empleado
+    perfil = PerfilUsuario.objects.get(empleado=empleado)
+    to = perfil.user.email  # Usar el correo del usuario relacionado
+
+    if not to:
+        print(f"Empleado {empleado.nombre} {empleado.apellido} no tiene un correo asignado.")
+        return
+
+    # Obtener la URL del sitio actual para generar las URLs completas
+    current_site = Site.objects.get_current()
+    logo_url = f'http://{current_site.domain}/static/images/logo.png'
+    dashboard_url = f'http://{current_site.domain}/directora/listar-tareas/'
+
+    # Renderizar la plantilla HTML con el CSS embebido en la plantilla
+    html_content = render_to_string('directora/tarea_asignada.html', {
+        'empleado': empleado,
+        'tarea': tarea,
+        'logo_url': logo_url,
+        'dashboard_url': dashboard_url,
+        'rol': rol,
+    })
+
+    # Crear el correo electrónico con contenido HTML y texto alternativo
+    email = EmailMultiAlternatives(subject, 'Se te ha asignado una nueva tarea. Por favor, revisa el dashboard.', from_email, [to])
+    email.attach_alternative(html_content, "text/html")
+    
+    # Enviar el correo
+    email.send()
+
+@login_required  
 def listar_tareas(request):
     tareas = Tarea.objects.filter(asignada_a=request.user).order_by('fecha_limite')  # Solo las tareas asignadas al usuario actual
     return render(request, 'directora/listar_tareas.html', {'tareas': tareas})
