@@ -25,4 +25,5 @@ urlpatterns = [
     path('exportar_proyectos_excel_grafico/', views.exportar_proyectos_excel_con_grafico, name='exportar_proyectos_excel_grafico'),
     path('asignar_tarea/', views.asignar_tarea, name='asignar_tarea'),
     path('listar_tareas/', views.listar_tareas, name='listar_tareas'), 
+    path('menu_tareas/', views.menu_tareas, name='menu_tareas'),
 ]

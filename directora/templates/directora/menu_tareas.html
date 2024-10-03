@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Proyectos</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gestión de Tareas - Menú</title>
     {% load static %}
+     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
-    <script src="{% static 'directora/js/dashboard.js' %}" defer></script>
+    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="{% static 'directora/css/estilos.css' %}">
     <link rel="shortcut icon" href="{% static 'inicio/images/favicon.ico' %}" type="image/x-icon">
 </head>
@@ -27,8 +27,8 @@
                     {% if rol == 'Directora' %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'empleados' %}">Empleados</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Dashboard Directora</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'menu_gestion_proyectos' %}">Gestión de Proyectos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_proyectos' %}">Dashboard Directora</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'menu_tareas' %}">Gestión de Tareas</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
                     {% elif rol == 'Asistente' %}
                         <li class="nav-item"><a class="nav-link" href="#">Asistencia</a></li>
@@ -57,30 +57,47 @@
             </div>
         </nav>
     </header>
-    <div class="container mt-5">
-        <h2 class="text-center mb-3">Dashboard de Proyectos</h2>
-        <canvas id="proyectosChart" width="400" height="200"></canvas>
-        <input type="hidden" id="chartData" value='[{{ proyectos_pendientes }}, {{ proyectos_en_progreso }}, {{ proyectos_terminados }}]'>
-        <div class="text-center mt-3">
-            <button onclick="downloadPDF()" class="btn btn-danger btn-sm">Descargar Gráfico como PDF</button>
+
+    <main class="container mt-4">
+        <h2 class="text-center mb-4">Gestión de Tareas</h2>
+        <div class="row justify-content-center">
+            <!-- Card: Listar Tareas -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card text-center mb-4">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img src="{% static 'directora/images/listar_tareas.png' %}" alt="Logo" style="height: 50px;">
+                        </div>
+                        <h5 class="card-title">Listar Tareas</h5>
+                        <p class="card-text">Ver todas las tareas asignadas.</p>
+                        <a href="{% url 'listar_tareas' %}" class="btn btn-warning btn-sm">Ver Tareas</a>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Card: Crear Tarea -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card text-center mb-4">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img src="{% static 'directora/images/crear_tarea.png' %}" alt="Logo" style="height: 50px;">
+                        </div>
+                        <h5 class="card-title">Crear Tarea</h5>
+                        <p class="card-text">Asignar una nueva tarea a un empleado.</p>
+                        <a href="{% url 'asignar_tarea' %}" class="btn btn-success">Crear Tarea</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="text-center mt-3">
-            <a href="{% url 'exportar_proyectos_excel' %}" class="btn btn-success">Descargar Datos en Excel</a>
-        </div>
-        <div class="text-center mt-3">
-            <a href="{% url 'exportar_proyectos_excel_grafico' %}" class="btn btn-success">Descargar Excel con Gráfico</a>
-        </div>
-        
-    </div>
-</body>
-     
+    </main>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Bootstrap y jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  
-  <!-- Script personalizado -->
-  <script src="{% static 'inicio/js/scripts.js' %}"></script>
+
+    <!-- Script personalizado -->
+    <script src="{% static 'inicio/js/scripts.js' %}"></script>
+</body>
 </html>

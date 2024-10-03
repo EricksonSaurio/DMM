@@ -391,6 +391,11 @@ def exportar_proyectos_excel_con_grafico(request):
     wb.save(response)
     return response
 
+@login_required
+def menu_tareas(request):
+    rol = obtener_rol(request.user)
+    return render(request, 'directora/menu_tareas.html', {'rol': rol})
+
 def asignar_tarea(request):
     if request.method == 'POST':
         titulo = request.POST.get('titulo')
@@ -412,12 +417,12 @@ def asignar_tarea(request):
                 asignada_a=perfil.user  # Asegurar que la tarea se asigna al usuario
             )
 
-            # Llamar a la función para enviar el correo
-            enviar_notificacion_correo(empleado, tarea)
+            # Llamar a la función para enviar el correo al usuario relacionado
+            enviar_notificacion_correo(request, empleado, tarea)
 
             # Notificaciones o mensajes
             messages.success(request, f'Tarea "{titulo}" asignada correctamente a {empleado.nombre} {empleado.apellido}')
-            return redirect('dashboard_directora')
+            return redirect('listar_tareas.html')
 
         except Empleado.DoesNotExist:
             messages.error(request, 'El empleado seleccionado no existe.')
@@ -449,7 +454,7 @@ def enviar_notificacion_correo(request, empleado, tarea):
     to = perfil.user.email  # Usar el correo del usuario relacionado
 
     if not to:
-        print(f"Empleado {empleado.nombre} {empleado.apellido} no tiene un correo asignado.")
+        print(f"El empleado {empleado.nombre} {empleado.apellido} no tiene un correo asignado.")
         return
 
     # Obtener la URL del sitio actual para generar las URLs completas
@@ -473,7 +478,15 @@ def enviar_notificacion_correo(request, empleado, tarea):
     # Enviar el correo
     email.send()
 
-@login_required  
+@login_required
 def listar_tareas(request):
-    tareas = Tarea.objects.filter(asignada_a=request.user).order_by('fecha_limite')  # Solo las tareas asignadas al usuario actual
+    usuario = request.user
+    
+    # Si el usuario es parte del grupo "Directora", obtiene todas las tareas
+    if usuario.groups.filter(name='Directora').exists():
+        tareas = Tarea.objects.all()
+    else:
+        # Si no, solo las tareas asignadas a ese usuario
+        tareas = Tarea.objects.filter(asignado_a=usuario)
+    
     return render(request, 'directora/listar_tareas.html', {'tareas': tareas})
