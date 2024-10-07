@@ -26,4 +26,8 @@ urlpatterns = [
     path('asignar_tarea/', views.asignar_tarea, name='asignar_tarea'),
     path('listar_tareas/', views.listar_tareas, name='listar_tareas'), 
     path('menu_tareas/', views.menu_tareas, name='menu_tareas'),
+    path('reporte/', views.reporte_proyectos, name='reporte_proyectos'),
+    path('reporte/pdf/', views.generar_pdf, name='generar_pdf'),
+    path('reporte/excel/', views.exportar_excel, name='exportar_excel'),
 ]
+
