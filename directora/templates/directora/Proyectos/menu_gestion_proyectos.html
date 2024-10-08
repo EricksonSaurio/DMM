@@ -24,6 +24,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     {% if rol == 'Directora' %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'empleados' %}">Empleados</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_proyectos'%}">Dashboard Directora</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'menu_gestion_proyectos' %}">Gestión de Proyectos</a></li>
