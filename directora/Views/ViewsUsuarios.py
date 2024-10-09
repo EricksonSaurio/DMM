@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from ..forms import UsuarioEmpleadoForm
-from ..models import UsuarioEliminado, Empleado
+from ..models import UsuarioEliminado, Empleado, PerfilUsuario
 
 def obtener_rol(user):
     if user.groups.filter(name='Directora').exists():
@@ -37,21 +37,38 @@ def ver_usuarios(request):
 def editar_usuario(request, user_id):
     rol = obtener_rol(request.user)
     user = get_object_or_404(User, pk=user_id)
-    try:
-        empleado = Empleado.objects.get(correo=user.email)
-    except Empleado.DoesNotExist:
-        empleado = None
+
+    # Obtenemos el perfil existente o lanzamos un 404 si no existe
+    perfil_usuario = PerfilUsuario.objects.filter(user=user).first()
 
     if request.method == 'POST':
         form = UsuarioEmpleadoForm(request.POST, instance=user)
         if form.is_valid():
+            # Guardamos los datos del formulario de usuario
             form.save()
+
+            # Si el perfil ya existe, lo actualizamos; de lo contrario, lo creamos
+            if perfil_usuario:
+                perfil_usuario.empleado = form.cleaned_data.get('empleado')
+                perfil_usuario.save()
+            else:
+                PerfilUsuario.objects.create(user=user, empleado=form.cleaned_data.get('empleado'))
+
+            messages.success(request, 'Usuario actualizado correctamente.')
             return redirect('ver_usuarios')
     else:
-        initial_data = {'empleado': empleado}
+        initial_data = {'empleado': perfil_usuario.empleado if perfil_usuario else None}
         form = UsuarioEmpleadoForm(instance=user, initial=initial_data)
 
-    return render(request, 'directora/Usuarios/editar_usuario.html', {'form': form, 'user_id': user_id, 'rol': rol, 'empleado': empleado})
+    return render(request, 'directora/Usuarios/editar_usuario.html', {
+        'form': form,
+        'user_id': user_id,
+        'rol': rol,
+        'empleado': perfil_usuario.empleado if perfil_usuario else None
+    })
+
+
+
 
 @login_required
 def eliminar_usuario(request, user_id):

@@ -42,19 +42,29 @@ def ver_empleados(request):
 
 @login_required
 def editar_empleado(request, empleado_id):
-    rol = obtener_rol(request.user)
-    empleado = get_object_or_404(Empleado, id=empleado_id)
+    rol = obtener_rol(request.user)  # Obtener el rol del usuario autenticado
+    empleado = get_object_or_404(Empleado, id=empleado_id)  # Buscar al empleado por ID o retornar un 404 si no existe
+    
+    # Si la solicitud es POST, significa que el formulario fue enviado
     if request.method == 'POST':
-        form = EmpleadoForm(request.POST, instance=empleado)
-        if form.is_valid():
-            form.save()
+        form = EmpleadoForm(request.POST, instance=empleado)  # Prellenar el formulario con la información enviada y la instancia del empleado
+        if form.is_valid():  # Verificar si el formulario es válido
+            form.save()  # Guardar los cambios en la base de datos
             messages.success(request, 'Empleado actualizado exitosamente.')
-            return redirect('ver_empleados')
+            return redirect('ver_empleados')  # Redirigir a la lista de empleados
         else:
             messages.error(request, 'Ocurrió un error al actualizar el empleado.')
+    
+    # Si es una solicitud GET, mostrar el formulario con la información actual del empleado
     else:
-        form = EmpleadoForm(instance=empleado)
-    return render(request, 'directora/Empleados/editar_empleado.html', {'form': form, 'rol': rol, 'empleado': empleado})
+        form = EmpleadoForm(instance=empleado)  # Prellenar el formulario con la instancia del empleado
+    
+    # Renderizar la plantilla con el formulario prellenado y los datos del empleado
+    return render(request, 'directora/Empleados/editar_empleado.html', {
+        'form': form, 
+        'rol': rol, 
+        'empleado': empleado
+    })
 
 @login_required
 def eliminar_empleado(request, empleado_id):

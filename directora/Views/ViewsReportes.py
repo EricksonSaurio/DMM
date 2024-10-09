@@ -1,35 +1,15 @@
-
-import matplotlib.pyplot as plt
-import io
-import urllib, base64
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import Proyecto, Tarea
+from ..models import Proyecto, Tarea, Empleado, PerfilUsuario
 from django.http import HttpResponse
-from xhtml2pdf import pisa  # Cambiar la biblioteca para generar PDFs
+from xhtml2pdf import pisa
 import pandas as pd
 from django.template.loader import render_to_string
-
+import plotly.graph_objs as go
+from plotly.offline import plot
 from django.utils import timezone
 from datetime import datetime
-
-from ..models import PerfilUsuario
-
-import matplotlib.pyplot as plt
-import io
-import urllib, base64
-from django.shortcuts import render
-from ..models import Proyecto, Tarea, Empleado
-from datetime import datetime
-from django.utils import timezone
-
-import matplotlib.pyplot as plt
-import io
-import urllib, base64
-from django.shortcuts import render
-from ..models import Proyecto, Tarea, Empleado
-from datetime import datetime
-from django.utils import timezone
+from collections import Counter
 
 def obtener_rol(user):
     if user.groups.filter(name='Directora').exists():
@@ -47,7 +27,7 @@ def reporte_proyectos(request):
     # Obtiene el rol del usuario actual
     rol = obtener_rol(request.user)
 
-    # Filtros
+    # Filtros para tareas
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_fin = request.GET.get('fecha_fin')
     empleado_id = request.GET.get('empleado')
@@ -56,74 +36,153 @@ def reporte_proyectos(request):
     proyectos = Proyecto.objects.all()
     tareas = Tarea.objects.all()
 
+    # Variable para almacenar el empleado con más tareas
+    empleado_mas_tareas = None
+    tareas_empleado_mas_tareas = 0
+
+    # Aplicar filtros a las tareas si hay fechas proporcionadas
     if fecha_inicio and fecha_fin:
-        # Convertir las fechas a aware con zona horaria
-        fecha_inicio_dt = datetime.strptime(fecha_inicio, "%Y-%m-%d")
-        fecha_fin_dt = datetime.strptime(fecha_fin, "%Y-%m-%d")
-        fecha_inicio_aware = timezone.make_aware(fecha_inicio_dt)
-        fecha_fin_aware = timezone.make_aware(fecha_fin_dt)
+        try:
+            # Convertir las fechas a aware con zona horaria
+            fecha_inicio_dt = datetime.strptime(fecha_inicio, "%Y-%m-%d")
+            fecha_fin_dt = datetime.strptime(fecha_fin, "%Y-%m-%d")
+            fecha_inicio_aware = timezone.make_aware(fecha_inicio_dt)
+            fecha_fin_aware = timezone.make_aware(fecha_fin_dt)
 
-        # Filtrar tareas por empleado y fechas
-        if empleado_id and empleado_id != "":
-            # Buscar el usuario relacionado con el empleado seleccionado
-            perfil_usuario = PerfilUsuario.objects.filter(empleado_id=empleado_id).first()
-            if perfil_usuario:
-                tareas = tareas.filter(asignada_a=perfil_usuario.user).filter(fecha_creacion__range=[fecha_inicio_aware, fecha_fin_aware])
+            # Filtrar tareas por empleado y fechas
+            if empleado_id and empleado_id != "":
+                perfil_usuario = PerfilUsuario.objects.filter(empleado_id=empleado_id).first()
+                if perfil_usuario:
+                    tareas = tareas.filter(
+                        asignada_a=perfil_usuario.user, 
+                        fecha_creacion__range=[fecha_inicio_aware, fecha_fin_aware]
+                    )
+                else:
+                    tareas = Tarea.objects.none()
             else:
-                tareas = Tarea.objects.none()  # Si no hay perfil asociado, no devolver tareas
-        else:
-            tareas = tareas.filter(fecha_creacion__range=[fecha_inicio_aware, fecha_fin_aware])
+                tareas = tareas.filter(
+                    fecha_creacion__range=[fecha_inicio_aware, fecha_fin_aware]
+                )
+        except Exception as e:
+            print(f"Error al filtrar tareas: {e}")
 
-    # Depuración: Verificar cuántas tareas se están filtrando
-    print(f"Tareas filtradas: {tareas.count()}")
-    print(f"Proyectos filtradas: {proyectos.count()}")
-    # Generar gráfico de proyectos por estado
-    estados_proyectos = ['en_progreso', 'completado', 'pendiente']
-    conteo_proyectos = [proyectos.filter(estado=estado).count() for estado in estados_proyectos]
-
-    if sum(conteo_proyectos) > 0:
-        plt.figure(figsize=(10, 6))
-        plt.bar(estados_proyectos, conteo_proyectos, color=['#FF9800', '#4CAF50', '#F44336'])
-        plt.title('Proyectos por Estado')
-        plt.xlabel('Estado')
-        plt.ylabel('Cantidad')
-
-        buf_proyectos = io.BytesIO()
-        plt.savefig(buf_proyectos, format='png')
-        buf_proyectos.seek(0)
-        string_proyectos = base64.b64encode(buf_proyectos.read())
-        uri_proyectos = urllib.parse.quote(string_proyectos)
     else:
-        uri_proyectos = None
+        # Si no hay filtros aplicados, determinar el empleado con más tareas
+        tareas_por_empleado = Counter(tarea.asignada_a.id for tarea in tareas)
+        print(f"Conteo de tareas por empleado: {tareas_por_empleado}")  # Depuración: verificar conteo
 
-    # Generar gráfico de tareas completadas vs no completadas
-    estados_tareas = ['true', 'false']
+        if tareas_por_empleado:
+            empleado_id_con_mas_tareas = max(tareas_por_empleado, key=tareas_por_empleado.get)
+            tareas_empleado_mas_tareas = tareas_por_empleado[empleado_id_con_mas_tareas]
+
+            try:
+                # Intentar obtener el empleado relacionado con el perfil de usuario
+                empleado_mas_tareas = Empleado.objects.filter(perfilusuario__user__id=empleado_id_con_mas_tareas).first()
+                print(f"Empleado con más tareas: {empleado_mas_tareas}, Tareas: {tareas_empleado_mas_tareas}")
+            except Exception as e:
+                print(f"Error al obtener el empleado con más tareas: {e}")
+                empleado_mas_tareas = None
+
+    # Gráficos de Barras para tareas y proyectos
+    estados_tareas = ['Completadas', 'No Completadas']
     conteo_tareas = [
         tareas.filter(completada=True).count(),
         tareas.filter(completada=False).count()
     ]
+    fig_barras_tareas = go.Figure(data=[go.Bar(
+        x=estados_tareas, 
+        y=conteo_tareas, 
+        marker_color=['#66BB6A', '#EF5350'],  # Verde para completadas, rojo para no completadas
+        text=conteo_tareas,
+        textposition='auto'
+    )])
+    fig_barras_tareas.update_layout(title='Tareas Completadas vs No Completadas', xaxis_title='Estado', yaxis_title='Cantidad')
 
-    if sum(conteo_tareas) > 0:
-        plt.figure(figsize=(10, 6))
-        plt.bar(estados_tareas, conteo_tareas, color=['#4CAF50', '#FF9800'])
-        plt.title('Tareas Completadas vs No Completadas')
-        plt.xlabel('Estado de Tareas')
-        plt.ylabel('Cantidad')
+    estados_proyectos = ['En_progreso', 'Completado', 'Pendiente']
+    conteo_proyectos = [proyectos.filter(estado=estado.lower()).count() for estado in estados_proyectos]
+    fig_barras_proyectos = go.Figure(data=[go.Bar(
+        x=estados_proyectos, 
+        y=conteo_proyectos, 
+        marker_color=['#FFA726', '#66BB6A', '#EF5350'],  # Naranja para en progreso, verde para completado, rojo para pendiente
+        text=conteo_proyectos,
+        textposition='auto'
+    )])
+    fig_barras_proyectos.update_layout(title='Proyectos por Estado', xaxis_title='Estado', yaxis_title='Cantidad')
 
-        buf_tareas = io.BytesIO()
-        plt.savefig(buf_tareas, format='png')
-        buf_tareas.seek(0)
-        string_tareas = base64.b64encode(buf_tareas.read())
-        uri_tareas = urllib.parse.quote(string_tareas)
-    else:
-        uri_tareas = None
+    # Gráficos de Pastel para tareas y proyectos
+    fig_pastel_tareas = go.Figure(data=[go.Pie(
+        labels=estados_tareas, 
+        values=conteo_tareas, 
+        hole=0.3, 
+        marker=dict(colors=['#66BB6A', '#EF5350']),  # Verde para completadas, rojo para no completadas
+        textinfo='label+percent'
+    )])
+    fig_pastel_tareas.update_layout(title='Distribución de Tareas Completadas vs No Completadas')
 
+    fig_pastel_proyectos = go.Figure(data=[go.Pie(
+        labels=estados_proyectos, 
+        values=conteo_proyectos, 
+        hole=0.3, 
+        marker=dict(colors=['#FFA726', '#66BB6A', '#EF5350']),  # Naranja para en progreso, verde para completado, rojo para pendiente
+        textinfo='label+percent'
+    )])
+    fig_pastel_proyectos.update_layout(title='Distribución de Proyectos por Estado')
+
+    # Gráfico de Dispersión de Proyectos por fecha de inicio y fin
+    fechas_inicio = [proyecto.fecha_inicio for proyecto in proyectos if proyecto.fecha_inicio]
+    fechas_fin = [proyecto.fecha_fin for proyecto in proyectos if proyecto.fecha_fin]
+
+    fig_dispersion_proyectos = go.Figure()
+
+    # Agregar puntos para las fechas de inicio
+    fig_dispersion_proyectos.add_trace(go.Scatter(
+        x=fechas_inicio, 
+        y=[1 for _ in fechas_inicio],
+        mode='markers',
+        name='Fecha de Inicio',
+        marker=dict(color='rgba(0, 128, 255, .8)')  # Azul para fechas de inicio
+    ))
+
+    # Agregar puntos para las fechas de fin
+    fig_dispersion_proyectos.add_trace(go.Scatter(
+        x=fechas_fin, 
+        y=[1.5 for _ in fechas_fin],  # Ajuste para mostrar los puntos de fin un poco más arriba
+        mode='markers',
+        name='Fecha de Fin',
+        marker=dict(color='rgba(255, 0, 0, .8)')  # Rojo para fechas de fin
+    ))
+
+    fig_dispersion_proyectos.update_layout(
+        title='Dispersión de Proyectos por Fecha de Inicio y Fin',
+        xaxis_title='Fecha',
+        yaxis_title='Proyectos',
+        yaxis=dict(showticklabels=False)  # Oculta las etiquetas del eje Y para simplificar
+    )
+
+    # Gráficos de Dispersión de Tareas por fecha de creación
+    fechas_tareas = [tarea.fecha_creacion.date() for tarea in tareas]
+    fig_dispersion_tareas = go.Figure(data=[go.Scatter(
+        x=fechas_tareas, 
+        y=[1 for _ in fechas_tareas],
+        mode='markers',
+        marker=dict(color='rgba(100, 200, 150, .8)')
+    )])
+    fig_dispersion_tareas.update_layout(title='Dispersión de Tareas por Fecha', xaxis_title='Fecha', yaxis_title='Cantidad')
+
+    # Renderizar gráficos
     return render(request, 'directora/reportes.html', {
-        'data_grafico_proyectos': uri_proyectos,
-        'data_grafico_tareas': uri_tareas,  # Agregar el gráfico de tareas
+        'grafico_barras_tareas': plot(fig_barras_tareas, output_type='div'),
+        'grafico_barras_proyectos': plot(fig_barras_proyectos, output_type='div'),
+        'grafico_pastel_tareas': plot(fig_pastel_tareas, output_type='div'),
+        'grafico_pastel_proyectos': plot(fig_pastel_proyectos, output_type='div'),
+        'grafico_dispersion_tareas': plot(fig_dispersion_tareas, output_type='div'),
+        'grafico_dispersion_proyectos': plot(fig_dispersion_proyectos, output_type='div'),
         'empleados': empleados,
-        'rol': rol  # Agregar el rol al contexto
+        'rol': rol,
+        'empleado_mas_tareas': empleado_mas_tareas,
+        'tareas_empleado_mas_tareas': tareas_empleado_mas_tareas
     })
+
 
 def generar_pdf(request):
     # Renderizamos la plantilla HTML

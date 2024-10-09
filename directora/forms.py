@@ -90,12 +90,21 @@ class UsuarioEmpleadoForm(forms.ModelForm):
         fields = ['username', 'email', 'password']  # Incluir email en los campos
 
     def save(self, commit=True):
+        # Guardamos los datos del usuario pero aún no los guardamos en la base de datos
         user = super().save(commit=False)
         user.email = self.cleaned_data['email']  # Asegurarse de asignar el correo electrónico
         user.set_password(self.cleaned_data["password"])
+        
         if commit:
-            user.save()
+            user.save()  # Guardamos el usuario en la base de datos
+            user.groups.clear()  # Limpiamos los grupos existentes antes de agregar uno nuevo
             user.groups.add(self.cleaned_data['grupo'])  # Asignar el grupo al usuario
-            perfil_usuario = PerfilUsuario(user=user, empleado=self.cleaned_data['empleado'])
+
+            # Aquí verificamos si ya existe un PerfilUsuario para este usuario
+            perfil_usuario, created = PerfilUsuario.objects.get_or_create(user=user)
+
+            # Actualizamos el perfil con el empleado seleccionado
+            perfil_usuario.empleado = self.cleaned_data['empleado']
             perfil_usuario.save()
+
         return user

@@ -10,47 +10,41 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{% url 'inicio' %}">
-                <img src="{% static 'inicio/images/DMMLOGO.png' %}" alt="Logo" style="height: 50px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    {% if rol == 'Directora' %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'empleados' %}">Empleados</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_proyectos'%}">Dashboard Directora</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'menu_gestion_proyectos' %}">Gestión de Proyectos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'reporte_proyectos' %}">Reportes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'menu_tareas' %}">Asignar Tareas</a></li>
-                    {% elif rol == 'Asistente' %}
-                        <li class="nav-item"><a class="nav-link" href="#">Asistencia</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Documentos</a></li>
-                    {% elif rol == 'Técnica de Campo' %}
-                        <li class="nav-item"><a class="nav-link" href="#">Campo</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Informes</a></li>
-                    {% else %}
-                        <li class="nav-item"><a class="nav-link" href="#">Menú por Defecto</a></li>
-                    {% endif %}
-                    <!-- Botón de Cerrar Sesión -->
-                    <li class="nav-item">
-                        <form method="POST" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger ml-2">Cerrar Sesión</button>
-                        </form>
-                    </li>
-                    <!-- Modo Oscuro Toggle Switch -->
-                    <li class="nav-item ml-3">
-                        <div class="custom-switch">
-                            <input type="checkbox" id="darkModeSwitch" class="toggle-switch">
-                            <label for="darkModeSwitch" class="switch-label">Modo Oscuro</label>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>   
+        <a class="navbar-brand" href="{% url 'inicio' %}">
+            <img src="{% static 'inicio/images/DMMLOGO.png' %}" alt="Logo" style="height: 50px;">
+        </a>
+        <ul class="navbar-nav ml-auto">
+            {% if rol == 'Directora' %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'empleados' %}">Empleados</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_proyectos' %}">Dashboard Directora</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'menu_tareas' %}">Gestión de Tareas</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
+            {% elif rol == 'Asistente' %}
+                <li class="nav-item"><a class="nav-link" href="#">Asistencia</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Documentos</a></li>
+            {% elif rol == 'Técnica de Campo' %}
+                <li class="nav-item"><a class="nav-link" href="#">Campo</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Informes</a></li>
+            {% else %}
+                <li class="nav-item"><a class="nav-link" href="#">Menú por Defecto</a></li>
+            {% endif %}
+            <!-- Botón de Cerrar Sesión -->
+            <li class="nav-item">
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger ml-2">Cerrar Sesión</button>
+                </form>
+            </li>
+            <!-- Modo Oscuro Toggle Switch -->
+            <li class="nav-item ml-3">
+                <div class="custom-switch">
+                    <input type="checkbox" id="darkModeSwitch" class="toggle-switch">
+                    <label for="darkModeSwitch" class="switch-label">Modo Oscuro</label>
+                </div>
+            </li>
+        </ul>
+        <!-- Resto del código del menú... -->
     </nav>   
 
     <div class="container mt-5">
@@ -70,7 +64,7 @@
                     <select id="empleado" name="empleado" class="form-control">
                         <option value="">Todos</option>
                         {% for empleado in empleados %}
-                            <option value="{{ empleado.id }}" {% if request.GET.empleado == empleado.id %}selected{% endif %}>
+                            <option value="{{ empleado.id }}" {% if request.GET.empleado == empleado.id|stringformat:"s" %}selected{% endif %}>
                                 {{ empleado.nombre }} {{ empleado.apellido }}
                             </option>
                         {% endfor %}
@@ -83,30 +77,51 @@
                 </div>
             </div>
         </form>
-            <!-- Mostrar gráfico de Tareas -->
-        
-        <!-- Mostrar gráfico de Tareas -->
-        <h2 class="text-center">Gráfico de Tareas Completadas vs No Completadas</h2>
+
+        <!-- Mostrar Empleado con Más Tareas -->
+        {% if empleado_mas_tareas %}
+            <div class="alert alert-info mt-4">
+                <strong>{{ empleado_mas_tareas.nombre }} {{ empleado_mas_tareas.apellido }}</strong> es el empleado con más tareas asignadas, con un total de <strong>{{ tareas_empleado_mas_tareas }}</strong> tareas.
+            </div>
+        {% endif %}
+
+        <!-- Gráficos de Tareas -->
+        <h2 class="text-center">Tareas Completadas vs No Completadas</h2>
         <div class="text-center">
-            {% if data_grafico_tareas %}
-                <img src="data:image/png;base64,{{ data_grafico_tareas }}" alt="Gráfico de Tareas">
-            {% else %}
-                <p>No se encontraron tareas para mostrar.</p>
-            {% endif %}
-        </div>
-        <!-- Mostrar gráfico de Proyectos -->
-        <h2 class="text-center">Gráfico de Proyectos por Estado</h2>
-        <div class="text-center">
-            {% if data_grafico_proyectos %}
-                <img src="data:image/png;base64,{{ data_grafico_proyectos }}" alt="Gráfico de Proyectos">
-            {% else %}
-                <p>No se encontraron proyectos para mostrar.</p>
-            {% endif %}
+            {{ grafico_barras_tareas|safe }}
         </div>
 
+        <h2 class="text-center">Distribución de Tareas Completadas</h2>
+        <div class="text-center">
+            {{ grafico_pastel_tareas|safe }}
+        </div>
 
+        <h2 class="text-center">Dispersión de Tareas por Fecha</h2>
+        <div class="text-center">
+            {{ grafico_dispersion_tareas|safe }}
+        </div>
+
+        <!-- Gráficos de Proyectos -->
+        <h2 class="text-center">Proyectos por Estado</h2>
+        <div class="text-center">
+            {{ grafico_barras_proyectos|safe }}
+        </div>
+
+        <h2 class="text-center">Distribución de Proyectos por Estado</h2>
+        <div class="text-center">
+            {{ grafico_pastel_proyectos|safe }}
+        </div>
+
+        <h2 class="text-center">Dispersión de Proyectos por Fecha</h2>
+        <div class="text-center">
+            {{ grafico_dispersion_proyectos|safe }}
+        </div>
+    </div>
+
+    <!-- Scripts de Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'inicio/js/scripts.js' %}"></script>
 </body>
 </html>
