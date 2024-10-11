@@ -25,6 +25,7 @@ urlpatterns = [
     path('login/', include('login.urls')),  # Ruta para login
     path('inicio/', include('inicio.urls')),  # Ruta para la página de inicio
     path('directora/', include('directora.urls')), 
+    path('asistente/', include('asistente.urls')),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),  # Ruta para logout
 ]
 

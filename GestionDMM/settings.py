@@ -17,6 +17,8 @@ from google.auth.transport.requests import Request
 import google.auth
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+from django.utils import timezone
+import pytz
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'inicio',
     'directora',
     'informacion',
+    'asistente',
 
 ]
 
@@ -117,8 +120,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es-gt'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Guatemala'
 
+guatemala_tz = pytz.timezone('America/Guatemala')
+hora_actual = timezone.now().astimezone(guatemala_tz)
+print(hora_actual)
 USE_I18N = True
 
 USE_TZ = True
@@ -162,11 +168,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ebatz312@gmail.com'  # Reemplaza con tu correo
-EMAIL_HOST_PASSWORD = 'cgei gati urhq lknh'  # Reemplaza con la contraseña de tu correo o una contraseña de aplicación
-DEFAULT_FROM_EMAIL = 'ebatz312@gmail.com'  # Reemplaza con tu correo
-EMAIL_USE_OAUTH2 = True  # Esta línea indica que usarás OAuth2
-# Si estás trabajando en local, puedes usar 'localhost:8000' o tu dirección de desarrollo
+EMAIL_HOST_USER = 'ebatz312@gmail.com'  
+EMAIL_HOST_PASSWORD = 'cgei gati urhq lknh'  
+DEFAULT_FROM_EMAIL = 'ebatz312@gmail.com'  
+EMAIL_USE_OAUTH2 = True  
+
 DEFAULT_DOMAIN = 'https://pdrh02gj-8000.use2.devtunnels.ms/'
 
 # Configura el protocolo (http para desarrollo, https para producción)

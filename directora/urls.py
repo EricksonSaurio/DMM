@@ -1,7 +1,7 @@
 # directora/urls.py
 from django.urls import path
 from directora.Views import ViewsEmpleado #type: ignore
-from directora.Views import views, ViewsProyectos, ViewsUsuarios, ViewsDashboard, ViewsTareas, ViewsReportes
+from directora.Views import views, ViewsProyectos, ViewsUsuarios, ViewsDashboard, ViewsTareas, ViewsReportes, ViewsAsistencia
 
 
 urlpatterns = [
@@ -31,5 +31,9 @@ urlpatterns = [
     path('reporte/', ViewsReportes.reporte_proyectos, name='reporte_proyectos'),
     path('reporte/pdf/', ViewsReportes.generar_pdf, name='generar_pdf'),
     path('reporte/excel/', ViewsReportes.exportar_excel, name='exportar_excel'),
+    path('asistencia/menu/', ViewsAsistencia.menu_asistencia, name='menu_asistencia'),
+    path('asistencia/entrada/', ViewsAsistencia.registrar_entrada, name='registrar_entrada'),
+    path('asistencia/salida/', ViewsAsistencia.registrar_salida, name='registrar_salida'),
+    path('asistencia/historial/', ViewsAsistencia.historial_asistencia, name='historial_asistencia'),
 ]
 

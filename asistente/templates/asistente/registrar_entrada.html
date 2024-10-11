@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Entrada</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Registrar Entrada</h2>
+        
+        {% if mensaje %}
+            <div class="alert alert-info text-center">
+                {{ mensaje }}
+            </div>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary w-100">Registrar Entrada</button>
+        </form>
+
+        <div class="mt-3">
+            <a href="{% url 'menu_asistencia' %}" class="btn btn-secondary w-100">Volver al Menú de Asistencia</a>
+        </div>
+    </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

@@ -103,4 +103,3 @@ def get_empleado_email(request, empleado_id):
         return JsonResponse({'correo': empleado.correo, 'rol': rol})
     except Empleado.DoesNotExist:
         return JsonResponse({'error': 'Empleado no encontrado', 'rol': rol}, status=404)
-

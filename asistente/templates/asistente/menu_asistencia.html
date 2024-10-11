@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu de Asistencia</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'path/to/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'directora/css/estilos.css' %}">
+    <link rel="stylesheet" href="{% static 'directora/css/ver_empleados.css' %}">
+    <link rel="stylesheet" href="{% static 'path/to/bootstrap.min.css' %}">
+    <style>
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'inicio' %}">
+            <img src="{% static 'inicio/images/DMMLOGO.png' %}" alt="Logo" style="height: 50px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if rol == 'Directora' %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'menu_asistencia' %}">Asistencia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'empleados' %}">Empleados</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_proyectos'%}">Dashboard Directora</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'menu_gestion_proyectos' %}">Gestión de Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'reporte_proyectos' %}">Reportes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'menu_tareas' %}">Asignar Tareas</a></li>
+                {% elif rol == 'Asistente' %}
+                    <li class="nav-item"><a class="nav-link" href=" {% url 'tareas_asignadas' %}">Tareas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'menu_asistencia' %}">Asistencia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Documentos</a></li>
+                {% elif rol == 'Técnica de Campo' %}
+                    <li class="nav-item"><a class="nav-link" href="#">Campo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Informes</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="#">Menú por Defecto</a></li>
+                {% endif %}
+                <!-- Botón de Cerrar Sesión -->
+                <li class="nav-item">
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger ml-2">Cerrar Sesión</button>
+                    </form>
+                </li>
+                <!-- Modo Oscuro Toggle Switch -->
+                <li class="nav-item ml-3">
+                    <div class="custom-switch">
+                        <input type="checkbox" id="darkModeSwitch" class="toggle-switch">
+                        <label for="darkModeSwitch" class="switch-label">Modo Oscuro</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Asistencia</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Marcar Entrada</h5>
+                        <p class="card-text">Registra tu hora de entrada al sistema.</p>
+                        <a href="{% url 'marcar_entrada' %}" class="btn btn-primary">Marcar Entrada</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Marcar Salida</h5>
+                        <p class="card-text">Registra tu hora de salida al sistema.</p>
+                        <a href="{% url 'marcar_salida' %}" class="btn btn-secondary">Marcar Salida</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Historial de Asistencia</h5>
+                        <p class="card-text">Consulta el historial de tus asistencias.</p>
+                        <a href="{% url 'ver_asistencia' %}" class="btn btn-info">Ver Historial</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'path/to/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

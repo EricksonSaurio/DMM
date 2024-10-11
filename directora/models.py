@@ -88,3 +88,14 @@ class Notificacion(models.Model):
     mensaje = models.TextField()
     leida = models.BooleanField(default=False)
     fecha = models.DateTimeField(auto_now_add=True)
+
+
+class Asistencia(models.Model):
+    empleado = models.ForeignKey(User, on_delete=models.CASCADE)
+    fecha = models.DateField(auto_now_add=True)
+    hora_entrada = models.TimeField(null=True, blank=True)
+    hora_salida = models.TimeField(null=True, blank=True)
+    estado = models.CharField(max_length=20, choices=[('Presente', 'Presente'), ('Ausente', 'Ausente')])
+
+    def __str__(self):
+        return f'Asistencia de {self.empleado.username} - {self.fecha}'
