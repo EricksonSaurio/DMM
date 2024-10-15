@@ -59,6 +59,9 @@
             <div class="col-md-4">
                 <div class="card text-center shadow">
                     <div class="card-body">
+                        <div class="text-center">
+                            <img src="https://dmmblobstorage.blob.core.windows.net/iconos/Entrada.png?sp=r&st=2024-10-15T01:34:00Z&se=2024-12-07T09:34:00Z&sv=2022-11-02&sr=b&sig=Er06Wx9OoyEtdMTh8N6EQNkfJMIcaSouxUDzxSGvwW8%3D" alt="Logo" style="height: 50px;">
+                        </div>
                         <h5 class="card-title">Registrar Entrada</h5>
                         <p class="card-text">Registra tu hora de entrada al sistema.</p>
                         <a href="{% url 'registrar_entrada' %}" class="btn btn-add">Registrar Entrada</a>
@@ -68,6 +71,9 @@
             <div class="col-md-4">
                 <div class="card text-center shadow">
                     <div class="card-body">
+                        <div class="text-center">
+                            <img src="https://dmmblobstorage.blob.core.windows.net/iconos/salida%20(1).png?sp=r&st=2024-10-15T01:36:27Z&se=2024-12-07T09:36:27Z&sv=2022-11-02&sr=b&sig=%2FEJWEWsO3F60pf8zYMMlpDalY04wcwULmg5y06L5S8c%3D" alt="Logo" style="height: 50px;">
+                        </div>
                         <h5 class="card-title">Registrar Salida</h5>
                         <p class="card-text">Registra tu hora de salida del sistema.</p>
                         <a href="{% url 'registrar_salida' %}" class="btn btn-add">Registrar Salida</a>
@@ -77,6 +83,9 @@
             <div class="col-md-4">
                 <div class="card text-center shadow">
                     <div class="card-body">
+                        <div class="text-center">
+                            <img src="https://dmmblobstorage.blob.core.windows.net/iconos/Historial%20de%20asistencia.png?sp=r&st=2024-10-15T01:32:38Z&se=2024-12-07T09:32:38Z&sv=2022-11-02&sr=b&sig=erk5FhD8hcqohXgt1Omra92DPwvepmJ7tDSlLhCzMnk%3D" alt="Logo" style="height: 50px;">
+                        </div>
                         <h5 class="card-title">Ver Historial</h5>
                         <p class="card-text">Consulta tu historial de asistencias.</p>
                         <a href="{% url 'historial_asistencia' %}" class="btn btn-view">Ver Historial</a>
@@ -86,5 +95,10 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{% static 'inicio/js/scripts.js' %}"></script>
 </body>
 </html>

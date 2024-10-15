@@ -44,8 +44,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'menu_tareas' %}">Asignar Tareas</a></li>
                 {% elif rol == 'Asistente' %}
                     <li class="nav-item"><a class="nav-link" href=" {% url 'tareas_asignadas' %}">Tareas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'menu_asistencia' %}">Asistencia</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Documentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'menu_asistencia_asistente' %}">Asistencia</a></li>
                 {% elif rol == 'Técnica de Campo' %}
                     <li class="nav-item"><a class="nav-link" href="#">Campo</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Informes</a></li>
@@ -79,7 +78,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Marcar Entrada</h5>
                         <p class="card-text">Registra tu hora de entrada al sistema.</p>
-                        <a href="{% url 'marcar_entrada' %}" class="btn btn-primary">Marcar Entrada</a>
+                        <a href="{% url 'marcar_entrada_asistente' %}" class="btn btn-primary">Marcar Entrada</a>
                     </div>
                 </div>
             </div>
@@ -88,7 +87,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Marcar Salida</h5>
                         <p class="card-text">Registra tu hora de salida al sistema.</p>
-                        <a href="{% url 'marcar_salida' %}" class="btn btn-secondary">Marcar Salida</a>
+                        <a href="{% url 'marcar_salida_asistente' %}" class="btn btn-secondary">Marcar Salida</a>
                     </div>
                 </div>
             </div>
@@ -97,7 +96,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Historial de Asistencia</h5>
                         <p class="card-text">Consulta el historial de tus asistencias.</p>
-                        <a href="{% url 'ver_asistencia' %}" class="btn btn-info">Ver Historial</a>
+                        <a href="{% url 'ver_asistencia_asistente' %}" class="btn btn-info">Ver Historial</a>
                     </div>
                 </div>
             </div>

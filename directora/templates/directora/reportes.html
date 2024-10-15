@@ -6,6 +6,7 @@
     <title>Reporte de Proyectos y Tareas</title>
     {% load static %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'directora/css/estilos.css' %}">
 </head>
 <body>
@@ -13,39 +14,48 @@
         <a class="navbar-brand" href="{% url 'inicio' %}">
             <img src="{% static 'inicio/images/DMMLOGO.png' %}" alt="Logo" style="height: 50px;">
         </a>
-        <ul class="navbar-nav ml-auto">
-            {% if rol == 'Directora' %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'empleados' %}">Empleados</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_proyectos' %}">Dashboard Directora</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'menu_tareas' %}">Gestión de Tareas</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
-            {% elif rol == 'Asistente' %}
-                <li class="nav-item"><a class="nav-link" href="#">Asistencia</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Documentos</a></li>
-            {% elif rol == 'Técnica de Campo' %}
-                <li class="nav-item"><a class="nav-link" href="#">Campo</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Informes</a></li>
-            {% else %}
-                <li class="nav-item"><a class="nav-link" href="#">Menú por Defecto</a></li>
-            {% endif %}
-            <!-- Botón de Cerrar Sesión -->
-            <li class="nav-item">
-                <form method="POST" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger ml-2">Cerrar Sesión</button>
-                </form>
-            </li>
-            <!-- Modo Oscuro Toggle Switch -->
-            <li class="nav-item ml-3">
-                <div class="custom-switch">
-                    <input type="checkbox" id="darkModeSwitch" class="toggle-switch">
-                    <label for="darkModeSwitch" class="switch-label">Modo Oscuro</label>
-                </div>
-            </li>
-        </ul>
-        <!-- Resto del código del menú... -->
-    </nav>   
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ml-auto">
+                {% if rol == 'Directora' %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'empleados' %}">Empleados</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'dashboard_proyectos' %}">Dashboard Directora</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'menu_tareas' %}">Gestión de Tareas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
+                {% elif rol == 'Asistente' %}
+                    <li class="nav-item"><a class="nav-link" href="#">Asistencia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Documentos</a></li>
+                {% elif rol == 'Técnica de Campo' %}
+                    <li class="nav-item"><a class="nav-link" href="#">Campo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Informes</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="#">Menú por Defecto</a></li>
+                {% endif %}
+                
+                <!-- Botón de Cerrar Sesión -->
+                <li class="nav-item">
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger ml-2">Cerrar Sesión</button>
+                    </form>
+                </li>
+    
+                <!-- Modo Oscuro Toggle Switch -->
+                <li class="nav-item ml-3">
+                    <div class="custom-switch">
+                        <input type="checkbox" id="darkModeSwitch" class="toggle-switch">
+                        <label for="darkModeSwitch" class="switch-label">Modo Oscuro</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
 
     <div class="container mt-5">
         <h1 class="text-center">Reporte de Proyectos y Tareas</h1>
@@ -116,8 +126,36 @@
         <div class="text-center">
             {{ grafico_dispersion_proyectos|safe }}
         </div>
+
+        <!-- Botones para Descargar Reportes -->
+        <div class="d-flex justify-content-center fixed-bottom mb-4"></div>
+            <div class="btn-group">
+            <a href="{% url 'generar_pdf' %}" class="btn btn-danger">Descargar PDF</a>
+            <a href="{% url 'exportar_excel' %}" class="btn btn-success">Descargar Excel</a>
+            <a href="{% url 'exportar_csv' %}" class="btn btn-warning">Descargar CSV</a>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">Primero</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                {% endif %}
+                <li class="page-item disabled"><a class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</a></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Último</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
     </div>
 
+    <!-- Incluir Script de Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
     <!-- Scripts de Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>

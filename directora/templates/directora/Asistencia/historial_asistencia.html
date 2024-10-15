@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial de Asistencia</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'directora/css/estilos.css' %}">
+    <link rel="stylesheet" href="{% static 'directora/css/ver_empleados.css' %}">
+    <link rel="shortcut icon" href="{% static 'inicio/images/favicon.ico' %}" type="image/x-icon">
 </head>
 <body>
     <div class="container mt-5">
@@ -38,6 +41,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        <a href="{% url 'menu_asistencia' %}" class="btn btn-secondary mt-3">Regresar al Menú</a>
     </div>
+    <script src="{% static 'inicio/js/scripts.js' %}"></script>
 </body>
 </html>

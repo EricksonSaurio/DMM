@@ -50,14 +50,21 @@ def registrar_salida(request):
     rol = obtener_rol(request.user)
 
     if request.method == 'POST':
+        # Obtén la hora actual ajustada a la zona horaria de Guatemala
+        ahora = timezone.now().astimezone(guatemala_tz)
+        fecha_actual = ahora.date()
+
         try:
             asistencia = Asistencia.objects.get(
                 empleado=request.user,
-                fecha=timezone.now().date()
+                fecha=fecha_actual
             )
-            asistencia.hora_salida = timezone.now().astimezone(guatemala_tz).time()
-            asistencia.save()
-            mensaje = 'Salida registrada correctamente'
+            if asistencia.hora_salida is None:
+                asistencia.hora_salida = ahora.time()
+                asistencia.save()
+                mensaje = 'Salida registrada correctamente'
+            else:
+                mensaje = 'Ya has registrado tu salida para hoy'
         except Asistencia.DoesNotExist:
             mensaje = 'No se encontró un registro de entrada para hoy. Registre su entrada antes de salir.'
         

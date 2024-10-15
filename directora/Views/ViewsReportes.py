@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 from ..models import Proyecto, Tarea, Empleado, PerfilUsuario
 from django.http import HttpResponse
 from xhtml2pdf import pisa
@@ -10,6 +11,9 @@ from plotly.offline import plot
 from django.utils import timezone
 from datetime import datetime
 from collections import Counter
+import csv
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 def obtener_rol(user):
     if user.groups.filter(name='Directora').exists():
@@ -21,8 +25,8 @@ def obtener_rol(user):
     else:
         return 'default'
 
-
 @login_required
+@cache_page(60 * 15)
 def reporte_proyectos(request):
     # Obtiene el rol del usuario actual
     rol = obtener_rol(request.user)
@@ -34,7 +38,7 @@ def reporte_proyectos(request):
 
     empleados = Empleado.objects.all()
     proyectos = Proyecto.objects.all()
-    tareas = Tarea.objects.all()
+    tareas = Tarea.objects.all().order_by('fecha_creacion')  # Ordenar tareas por fecha de creación
 
     # Variable para almacenar el empleado con más tareas
     empleado_mas_tareas = None
@@ -69,7 +73,6 @@ def reporte_proyectos(request):
     else:
         # Si no hay filtros aplicados, determinar el empleado con más tareas
         tareas_por_empleado = Counter(tarea.asignada_a.id for tarea in tareas)
-        print(f"Conteo de tareas por empleado: {tareas_por_empleado}")  # Depuración: verificar conteo
 
         if tareas_por_empleado:
             empleado_id_con_mas_tareas = max(tareas_por_empleado, key=tareas_por_empleado.get)
@@ -78,12 +81,16 @@ def reporte_proyectos(request):
             try:
                 # Intentar obtener el empleado relacionado con el perfil de usuario
                 empleado_mas_tareas = Empleado.objects.filter(perfilusuario__user__id=empleado_id_con_mas_tareas).first()
-                print(f"Empleado con más tareas: {empleado_mas_tareas}, Tareas: {tareas_empleado_mas_tareas}")
             except Exception as e:
                 print(f"Error al obtener el empleado con más tareas: {e}")
                 empleado_mas_tareas = None
 
-    # Gráficos de Barras para tareas y proyectos
+    # Paginación para tareas
+    paginator = Paginator(tareas, 10)  # 10 tareas por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Gráficos de Barras para tareas
     estados_tareas = ['Completadas', 'No Completadas']
     conteo_tareas = [
         tareas.filter(completada=True).count(),
@@ -98,6 +105,7 @@ def reporte_proyectos(request):
     )])
     fig_barras_tareas.update_layout(title='Tareas Completadas vs No Completadas', xaxis_title='Estado', yaxis_title='Cantidad')
 
+    # Gráficos de Barras para proyectos
     estados_proyectos = ['En_progreso', 'Completado', 'Pendiente']
     conteo_proyectos = [proyectos.filter(estado=estado.lower()).count() for estado in estados_proyectos]
     fig_barras_proyectos = go.Figure(data=[go.Bar(
@@ -109,7 +117,7 @@ def reporte_proyectos(request):
     )])
     fig_barras_proyectos.update_layout(title='Proyectos por Estado', xaxis_title='Estado', yaxis_title='Cantidad')
 
-    # Gráficos de Pastel para tareas y proyectos
+    # Gráficos de Pastel para tareas
     fig_pastel_tareas = go.Figure(data=[go.Pie(
         labels=estados_tareas, 
         values=conteo_tareas, 
@@ -119,6 +127,7 @@ def reporte_proyectos(request):
     )])
     fig_pastel_tareas.update_layout(title='Distribución de Tareas Completadas vs No Completadas')
 
+    # Gráficos de Pastel para proyectos
     fig_pastel_proyectos = go.Figure(data=[go.Pie(
         labels=estados_proyectos, 
         values=conteo_proyectos, 
@@ -128,13 +137,22 @@ def reporte_proyectos(request):
     )])
     fig_pastel_proyectos.update_layout(title='Distribución de Proyectos por Estado')
 
-    # Gráfico de Dispersión de Proyectos por fecha de inicio y fin
+    # Gráficos de Dispersión para tareas
+    fechas_tareas = [tarea.fecha_creacion.date() for tarea in tareas]
+    fig_dispersion_tareas = go.Figure(data=[go.Scatter(
+        x=fechas_tareas, 
+        y=[1 for _ in fechas_tareas],  # Ubica todos los puntos en la misma línea
+        mode='markers',
+        marker=dict(color='rgba(100, 200, 150, .8)')
+    )])
+    fig_dispersion_tareas.update_layout(title='Dispersión de Tareas por Fecha', xaxis_title='Fecha', yaxis_title='Cantidad')
+
+    # Gráficos de Dispersión para proyectos (fechas de inicio y fin)
     fechas_inicio = [proyecto.fecha_inicio for proyecto in proyectos if proyecto.fecha_inicio]
     fechas_fin = [proyecto.fecha_fin for proyecto in proyectos if proyecto.fecha_fin]
-
     fig_dispersion_proyectos = go.Figure()
 
-    # Agregar puntos para las fechas de inicio
+    # Fechas de inicio
     fig_dispersion_proyectos.add_trace(go.Scatter(
         x=fechas_inicio, 
         y=[1 for _ in fechas_inicio],
@@ -143,7 +161,7 @@ def reporte_proyectos(request):
         marker=dict(color='rgba(0, 128, 255, .8)')  # Azul para fechas de inicio
     ))
 
-    # Agregar puntos para las fechas de fin
+    # Fechas de fin
     fig_dispersion_proyectos.add_trace(go.Scatter(
         x=fechas_fin, 
         y=[1.5 for _ in fechas_fin],  # Ajuste para mostrar los puntos de fin un poco más arriba
@@ -159,17 +177,7 @@ def reporte_proyectos(request):
         yaxis=dict(showticklabels=False)  # Oculta las etiquetas del eje Y para simplificar
     )
 
-    # Gráficos de Dispersión de Tareas por fecha de creación
-    fechas_tareas = [tarea.fecha_creacion.date() for tarea in tareas]
-    fig_dispersion_tareas = go.Figure(data=[go.Scatter(
-        x=fechas_tareas, 
-        y=[1 for _ in fechas_tareas],
-        mode='markers',
-        marker=dict(color='rgba(100, 200, 150, .8)')
-    )])
-    fig_dispersion_tareas.update_layout(title='Dispersión de Tareas por Fecha', xaxis_title='Fecha', yaxis_title='Cantidad')
-
-    # Renderizar gráficos
+    # Renderización de gráficos y página
     return render(request, 'directora/reportes.html', {
         'grafico_barras_tareas': plot(fig_barras_tareas, output_type='div'),
         'grafico_barras_proyectos': plot(fig_barras_proyectos, output_type='div'),
@@ -180,10 +188,11 @@ def reporte_proyectos(request):
         'empleados': empleados,
         'rol': rol,
         'empleado_mas_tareas': empleado_mas_tareas,
-        'tareas_empleado_mas_tareas': tareas_empleado_mas_tareas
+        'tareas_empleado_mas_tareas': tareas_empleado_mas_tareas,
+        'page_obj': page_obj  # Tareas paginadas
     })
 
-
+# Función para generar PDF
 def generar_pdf(request):
     # Renderizamos la plantilla HTML
     html_string = render_to_string('directora/reportes_pdf.html', {
@@ -195,15 +204,14 @@ def generar_pdf(request):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename="reporte.pdf"'
 
-    pisa_status = pisa.CreatePDF(
-        html_string, dest=response
-    )
+    pisa_status = pisa.CreatePDF(html_string, dest=response)
     
     if pisa_status.err:
         return HttpResponse('Error al generar PDF', status=500)
     
     return response
 
+# Función para exportar a Excel
 def exportar_excel(request):
     proyectos = Proyecto.objects.all()
     tareas = Tarea.objects.all()
@@ -219,4 +227,19 @@ def exportar_excel(request):
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="reporte.xlsx"'
     df.to_excel(response, index=False)
+    return response
+
+# Función para exportar a CSV
+def exportar_csv(request):
+    tareas = Tarea.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="reporte.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Título Tarea', 'Estado', 'Asignada a'])
+
+    for tarea in tareas:
+        writer.writerow([tarea.titulo, 'Completada' if tarea.completada else 'Pendiente', tarea.asignada_a.username])
+
     return response

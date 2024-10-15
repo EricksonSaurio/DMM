@@ -19,6 +19,7 @@ import google.auth
 BASE_DIR = Path(__file__).resolve().parent.parent
 from django.utils import timezone
 import pytz
+from decouple import config
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,7 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+SECRET_KEY = config('SECRET_KEY')
 # Application definition
 
 INSTALLED_APPS = [
@@ -90,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'DMM',
         'USER': 'postgres',
-        'PASSWORD': 'Mayerly123',
+        'PASSWORD': config('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -169,7 +170,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ebatz312@gmail.com'  
-EMAIL_HOST_PASSWORD = 'cgei gati urhq lknh'  
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = 'ebatz312@gmail.com'  
 EMAIL_USE_OAUTH2 = True  
 

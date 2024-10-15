@@ -31,6 +31,7 @@ urlpatterns = [
     path('reporte/', ViewsReportes.reporte_proyectos, name='reporte_proyectos'),
     path('reporte/pdf/', ViewsReportes.generar_pdf, name='generar_pdf'),
     path('reporte/excel/', ViewsReportes.exportar_excel, name='exportar_excel'),
+    path('reporte/csv/', ViewsReportes.exportar_csv, name='exportar_csv'),
     path('asistencia/menu/', ViewsAsistencia.menu_asistencia, name='menu_asistencia'),
     path('asistencia/entrada/', ViewsAsistencia.registrar_entrada, name='registrar_entrada'),
     path('asistencia/salida/', ViewsAsistencia.registrar_salida, name='registrar_salida'),

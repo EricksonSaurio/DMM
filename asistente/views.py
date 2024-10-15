@@ -36,12 +36,12 @@ def tareas_asignadas(request):
 # Create your views here.
 
 @login_required
-def menu_asistencia(request):
+def menu_asistencia_asistente(request):
     rol = obtener_rol(request.user)
-    return render(request, 'asistente/menu_asistencia.html', {'rol': rol})
+    return render(request, 'asistente/menu_asistencia_asistente.html', {'rol': rol})
 
 @login_required
-def marcar_entrada(request):
+def marcar_entrada_asistente(request):
     mensaje = None
     guatemala_tz = pytz.timezone('America/Guatemala')
     rol = obtener_rol(request.user)
@@ -63,10 +63,10 @@ def marcar_entrada(request):
         )
         mensaje = 'Entrada registrada correctamente' if created else 'Ya has registrado tu entrada para hoy.'
     
-    return render(request, 'asistente/registrar_entrada.html', {'mensaje': mensaje, 'rol': rol})
+    return render(request, 'asistente/registrar_entrada_asistente.html', {'mensaje': mensaje, 'rol': rol})
 
 @login_required
-def marcar_salida(request):
+def marcar_salida_asistente(request):
     mensaje = None
     guatemala_tz = pytz.timezone('America/Guatemala')
     rol = obtener_rol(request.user)
@@ -102,12 +102,12 @@ def marcar_salida(request):
         except Asistencia.DoesNotExist:
             mensaje = 'No se encontró un registro de entrada para hoy. Registre su entrada antes de salir.'
 
-        return render(request, 'asistente/registrar_salida.html', {'mensaje': mensaje, 'rol': rol})
+        return render(request, 'asistente/registrar_salida_asistente.html', {'mensaje': mensaje, 'rol': rol})
 
-    return render(request, 'asistente/registrar_salida.html', {'mensaje': mensaje, 'rol': rol})
+    return render(request, 'asistente/registrar_salida_asistente.html', {'mensaje': mensaje, 'rol': rol})
 
 @login_required
-def ver_asistencia(request):
+def ver_asistencia_asistente(request):
     # Obtiene el perfil del usuario actual
     perfil_usuario = get_object_or_404(PerfilUsuario, user=request.user)
 
@@ -123,4 +123,4 @@ def ver_asistencia(request):
     # Filtra las asistencias del empleado actual
     asistencias = Asistencia.objects.filter(empleado=request.user)
 
-    return render(request, 'asistente/ver_asistencia.html', {'asistencias': asistencias})
+    return render(request, 'asistente/ver_asistencia_asistente.html', {'asistencias': asistencias})

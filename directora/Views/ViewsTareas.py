@@ -6,6 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.utils import timezone
 
 def obtener_rol(user):
     if user.groups.filter(name='Directora').exists():
@@ -35,26 +36,19 @@ def asignar_tarea(request):
         empleado_id = request.POST.get('empleado')
 
         try:
-            # Obtener el empleado seleccionado
             empleado = Empleado.objects.get(id=empleado_id)
-            # Obtener el perfil de usuario asociado al empleado
             perfil = PerfilUsuario.objects.get(empleado=empleado)
 
-            # Crear la tarea y asignarla al usuario relacionado
             tarea = Tarea.objects.create(
                 titulo=titulo,
                 descripcion=descripcion,
                 fecha_limite=fecha_limite,
-                asignada_a=perfil.user  # Asegurar que la tarea se asigna al usuario
+                asignada_a=perfil.user
             )
-
-            # Llamar a la función para enviar el correo al usuario relacionado
             enviar_notificacion_correo(request, empleado, tarea)
 
-            # Notificaciones o mensajes
             messages.success(request, f'Tarea "{titulo}" asignada correctamente a {empleado.nombre} {empleado.apellido}')
-            return redirect('listar_tareas')
-
+            # Ya no se realiza la redirección aquí
         except Empleado.DoesNotExist:
             messages.error(request, 'El empleado seleccionado no existe.')
         except PerfilUsuario.DoesNotExist:
@@ -119,4 +113,11 @@ def listar_tareas(request):
         # Si no, solo las tareas asignadas a ese usuario
         tareas = Tarea.objects.filter(asignada_a=usuario)
     
-    return render(request, 'directora/Tareas/listar_tareas.html', {'tareas': tareas, 'rol': rol})
+    # Actualiza el estado de las tareas según la fecha límite
+    hoy = timezone.now().date()
+    for tarea in tareas:
+        if not tarea.completada and tarea.fecha_limite < hoy:
+            tarea.completada = False  # Marcar como incompleta si ya está vencida
+            tarea.save()
+
+    return render(request, 'directora/Tareas/listar_tareas.html', {'tareas': tareas, 'rol': rol, 'hoy': hoy})

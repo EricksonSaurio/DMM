@@ -1,16 +1,20 @@
 /* Estilo General del Contenedor */
 .container {
     max-width: 960px;
-    position: relative; /* Necesario para posicionar logos absolutamente */
+    position: relative;
+    margin: auto;
+    padding: 15px;
 }
 
 /* Jumbotron (Banner Principal) */
 .jumbotron {
-    background: #E1BEE7; /* Morado claro */
-    color: #4A148C; /* Morado oscuro */
-    padding: 5rem 1rem; /* Ajusta este valor si es necesario */
+    background: linear-gradient(135deg, #FFDEE9, #B5FFFC); /* Colores suaves y atractivos */
+    color: #283593; /* Azul oscuro para buen contraste */
+    padding: 5rem 1rem;
     text-align: center;
-    position: relative; /* Importante para posicionamiento absoluto de logos */
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Texto del Banner */
@@ -18,14 +22,15 @@
     font-size: 3rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    padding: 0 10px; /* Menos padding para permitir más espacio en dispositivos pequeños */
-    text-shadow: 2px 2px 4px #6A1B9A; /* Sombra morado oscuro */
+    padding: 0 15px;
+    text-shadow: 2px 2px 4px rgba(40, 53, 147, 0.4); /* Sombra ligera para destacar el texto */
 }
 
 .jumbotron p {
     font-size: 1.5rem;
     font-family: 'Arial', sans-serif;
-    padding: 0 10px; /* Consistente con el padding del título */
+    padding: 0 15px;
+    line-height: 1.5;
 }
 
 /* Logos en el Banner */
@@ -33,86 +38,104 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 80px; /* Ajusta según necesidades, más pequeños para móviles */
+    width: 80px;
     height: auto;
-    z-index: 1; /* Logos debajo del texto */
+    z-index: 1;
 }
 
 .logo-left {
-    left: 10px; /* Menos espacio desde el borde para dispositivos móviles */
+    left: 15px;
 }
 
 .logo-right {
-    right: 10px; /* Menos espacio desde el borde para dispositivos móviles */
+    right: 15px;
 }
 
 @media (max-width: 768px) {
-    /* En pantallas pequeñas, reduce aún más el tamaño de los logos */
     .logo-left, .logo-right {
-        width: 60px; /* Logos aún más pequeños en dispositivos móviles */
+        width: 60px;
     }
-
-    /* Ajusta el padding del texto para asegurar visibilidad y no superposición */
     .jumbotron h1, .jumbotron p {
-        padding: 0 20px; /* Un poco más de espacio a los lados */
+        padding: 0 20px;
     }
 }
 
 /* Contenedor de los botones fuera del Jumbotron */
 .button-container {
-    text-align: center; /* Centrado horizontalmente */
-    margin: 20px 0; /* Espacio antes y después del contenedor de botones */
+    text-align: center;
+    margin: 30px 0;
 }
 
-/* Botones estilizados para ambos modos */
+/* Botones estilizados */
 .btn-login, .btn-dark-mode {
-    background-color: #8E24AA; /* Morado fuerte */
-    color: #FFFFFF; /* Texto blanco */
+    background-color: #64B5F6; /* Azul claro */
+    color: #FFFFFF;
     border: none;
-    padding: 10px 20px;
-    font-size: 1.2em;
+    padding: 12px 25px;
+    font-size: 1.1em;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    margin-right: 10px; /* Espacio entre botones */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-right: 10px;
 }
 
 .btn-login:hover, .btn-dark-mode:hover {
-    background-color: #6A1B9A; /* Morado oscuro al pasar el mouse */
+    background-color: #42A5F5; /* Azul más oscuro al pasar el mouse */
+    transform: scale(1.05);
 }
 
 /* Estilos de las Tarjetas (Cards) */
 .card-body {
     text-align: center;
-    background-color: #F3E5F5; /* Morado muy claro */
-    color: #4A148C;
+    background-color: #E3F2FD; /* Azul muy claro */
+    color: #283593;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card-body h5, .card-body p {
-    color: #4A148C; /* Morado oscuro */
+.card-body h5 {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.card-body p {
+    color: #283593;
+    line-height: 1.4;
 }
 
 /* Estilos para Títulos y Párrafos */
 h2 {
-    color: #8E24AA; /* Morado fuerte */
+    color: #42A5F5; /* Azul intermedio */
     margin-top: 40px;
     margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
 }
 
 p {
     font-size: 1.1em;
-    color: #4A148C; /* Morado oscuro */
+    color: #283593;
+    line-height: 1.6;
 }
 
 /* Estilos para la tabla de Tracking */
 .table {
     margin-top: 30px;
-    border: 2px solid #F3E5F5; /* Morado muy claro */
+    border: 2px solid #E3F2FD;
 }
 
 .table th, .table td {
     background-color: #FFFFFF;
-    color: #4A148C;
+    color: #283593;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table thead {
+    background-color: #64B5F6;
+    color: #FFFFFF;
 }
 
 /* Listas */
@@ -124,16 +147,55 @@ ul {
 ul li {
     margin-bottom: 10px;
     font-size: 1.1em;
-    color: #4A148C; /* Morado oscuro */
+    color: #283593;
+    line-height: 1.6;
 }
 
 /* Modo Oscuro: Solo el fondo negro */
 body.dark-mode {
-    background-color:  #1e1e1e;
+    background-color: #1e1e1e;
 }
 
 .jumbotron.dark-mode {
-    /*background-color: #1A237E; /* Fondo del banner azul muy oscuro */
-   
-    color: #FFFFFF; /* Texto claro para contraste */
+    background: linear-gradient(135deg, #333, #555);
+    color: #FFFFFF;
+}
+
+.card-body.dark-mode {
+    background-color: #424242;
+    color: #FFFFFF;
+}
+
+.table.dark-mode {
+    border-color: #555;
+}
+
+.table.dark-mode th, .table.dark-mode td {
+    background-color: #333;
+    color: #FFFFFF;
+}
+
+/* Transiciones para Modo Oscuro */
+body, .jumbotron, .card-body, .table {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 15px;
+    }
+
+    .btn-login, .btn-dark-mode {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+
+    .jumbotron h1 {
+        font-size: 2.5rem;
+    }
+
+    .jumbotron p {
+        font-size: 1.2rem;
+    }
 }

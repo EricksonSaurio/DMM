@@ -79,12 +79,14 @@
                         <td>{{ tarea.titulo }}</td>
                         <td>{{ tarea.descripcion }}</td>
                         <td>{{ tarea.fecha_creacion|date:"d/m/Y" }}</td>
-                        <td>{{ tarea.fecha_vencimiento|date:"d/m/Y" }}</td>
+                        <td>{{ tarea.fecha_limite|date:"d/m/Y" }}</td>
                         <td>
                             {% if tarea.completada %}
-                            <span class="badge badge-success">Completada</span>
+                                <span class="badge badge-success">Completada</span>
+                            {% elif tarea.fecha_limite < hoy %}
+                                <span class="badge badge-danger">Vencida</span>
                             {% else %}
-                            <span class="badge badge-warning">Pendiente</span>
+                                <span class="badge badge-warning">Pendiente</span>
                             {% endif %}
                         </td>
                         <td>

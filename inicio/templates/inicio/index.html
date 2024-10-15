@@ -32,8 +32,8 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'menu_tareas' %}">Asignar Tareas</a></li>
             {% elif rol == 'Asistente' %}
                 <li class="nav-item"><a class="nav-link" href=" {% url 'tareas_asignadas' %}">Tareas</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'menu_asistencia' %}">Asistencia</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Documentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'menu_asistencia_asistente' %}">Asistencia</a></li>
+        
             {% elif rol == 'Técnica de Campo' %}
                 <li class="nav-item"><a class="nav-link" href="#">Campo</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Informes</a></li>

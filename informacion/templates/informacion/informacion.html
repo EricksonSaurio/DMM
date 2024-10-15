@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Información Pública</title>
+    <title>Información Pública | DMM</title>
     {% load static %}
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -15,47 +15,51 @@
 
 <!-- Banner principal -->
 <div class="jumbotron jumbotron-fluid text-white">
-    <div class="container">
-        <img src="{% static 'informacion/images/DMMLOGO.png' %}" alt="Logo DMM" class="logo-left">
+    <div class="container position-relative">
+        <img src="https://dmmblobstorage.blob.core.windows.net/imagenes/DMMLOGO.png?sp=r&st=2024-10-15T00:32:22Z&se=2024-12-07T08:32:22Z&sv=2022-11-02&sr=b&sig=tu7fxjT8herI0sWxwL6pcjIdbIMvSnv3D8EBicBBKNs%3D" alt="Logo DMM" class="logo-left">
         <h1 class="display-4">Bienvenido a DMM</h1>
-        <p class="lead">Toda la información que necesitas.</p>
-        <img src="{% static 'informacion/images/MUNILOGO.png' %}" alt="Logo Derecho" class="logo-right">
+        <p class="lead">Toda la información que necesitas para estar al día.</p>
+        <img src="https://dmmblobstorage.blob.core.windows.net/imagenes/MUNILOGO.png?sp=r&st=2024-10-15T00:35:00Z&se=2024-12-07T08:35:00Z&sv=2022-11-02&sr=b&sig=TrxJX9I%2FnbfBOyX90W7l2Cb3oaaFRqwZAUVo2KIr9EE%3D" alt="Logo Derecho" class="logo-right">
     </div>
 </div>
 
 <!-- Sección de Botones (Login y Modo Oscuro) -->
 <div class="button-container">
-    <button class="btn btn-login" onclick="window.location.href='/login/'">Login</button>
+    <button class="btn btn-login" onclick="window.location.href='/login/'">Iniciar Sesión</button>
     <button class="btn btn-dark-mode" id="dark-mode-toggle">Modo Oscuro</button>
 </div>
 
 <!-- Sección de Misión, Visión y Valores -->
 <div class="container my-5">
-    <div class="row">
+    <div class="row text-center">
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <img class="card-img-top" src="{% static 'informacion/images/vision.png' %}" alt="Visión">
+                <img class="card-img-top" src="https://dmmblobstorage.blob.core.windows.net/imagenes/vision.png?sp=r&st=2024-10-15T00:36:49Z&se=2024-12-07T08:36:49Z&sv=2022-11-02&sr=b&sig=NnWVaUlMkvhtt52C7rRQJ6Kq1JYfkSHu4FNXny2DqVg%3D" alt="Visión">
                 <div class="card-body">
                     <h5 class="card-title">Visión</h5>
-                    <p class="card-text">Nuestra visión es crear un entorno eficiente y colaborativo para la gestión de empleados.</p>
+                    <p class="card-text">Que la Dirección Municipal de la Mujer sea fortalecida a nivel funcional,
+                        municipal, funcionando con un equipo técnico  de acuerdo a los requerimientos legales y 
+                        técnicos; incidiendo, impulsando y elaborando políticas públicas municipales, programas y 
+                        proyectos que respondan a las demandas de las mujeres.
+                    </p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <img class="card-img-top" src="{% static 'informacion/images/mision.png' %}" alt="Misión">
+                <img class="card-img-top" src="https://dmmblobstorage.blob.core.windows.net/imagenes/mision.png?sp=r&st=2024-10-15T00:35:50Z&se=2024-12-07T08:35:50Z&sv=2022-11-02&sr=b&sig=ebHVGtMwwSLFLZ%2BClBmHlH3lm0OzDgNZ63MSbtnK3Xo%3D" alt="Misión">
                 <div class="card-body">
                     <h5 class="card-title">Misión</h5>
-                    <p class="card-text">Nuestro proyecto busca la optimización de procesos a través de una plataforma innovadora.</p>
+                    <p class="card-text">Constituirse en el soporte técnico-administrativo de la municipalidad enfocadas a la atención de las necesidades específicas de las mujeres del municipio, en los aspectos económica, social y política, que promueve la participación en el ámbito comunitario, municipal y departamental e incidiendo en los diferentes espacios de toma de decisiones.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <img class="card-img-top" src="{% static 'informacion/images/valores.png' %}" alt="Valores">
+                <img class="card-img-top" src="https://dmmblobstorage.blob.core.windows.net/imagenes/valores.png?sp=r&st=2024-10-15T00:37:48Z&se=2024-12-07T08:37:48Z&sv=2022-11-02&sr=b&sig=OkPn1OjUzoTqpsU3fCQdos7zhla6PH4X%2FkdsQ6efJzw%3D" alt="Valores">
                 <div class="card-body">
                     <h5 class="card-title">Valores</h5>
-                    <p class="card-text">Fomentamos la transparencia, innovación y el compromiso en cada aspecto de nuestro trabajo.</p>
+                    <p class="card-text">Transparencia, innovación y compromiso en cada aspecto de nuestro trabajo.</p>
                 </div>
             </div>
         </div>
@@ -64,79 +68,144 @@
 
 <!-- Sección de Proyectos Realizados -->
 <div class="container my-5">
-    <h2>Proyectos Realizados por la DMM</h2>
-    <p>A continuación, algunos de los proyectos más importantes realizados por la DMM.</p>
+    <h2 class="text-center">Proyectos Realizados por la DMM</h2>
+    <p class="text-center">Descubre algunos de los proyectos más importantes realizados por la DMM para mejorar la comunidad.</p>
     <div class="row">
-        {% for proyecto in proyectos %}
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <!-- Inicio del Carrusel -->
-                <div id="carousel-{{ proyecto.id }}" class="carousel slide" data-bs-ride="carousel">
+                <div id="carouselProyecto1" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
-                        {% for imagen in proyecto.imagenes.all %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <img src="{{ imagen.imagen.url }}" alt="{{ proyecto.nombre }}">
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" src="https://dmmblobstorage.blob.core.windows.net/imagenes/proyecto1_1.jpg?sp=r&st=2024-10-15T00:39:23Z&se=2024-12-07T08:39:23Z&sv=2022-11-02&sr=b&sig=Er7ZDt2cxQnFru8l5OKBO%2FoEoh2qfhdQhRBe4nG6hNU%3D" alt="Proyecto 1 Imagen 1">
                         </div>
-                        {% endfor %}
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="https://dmmblobstorage.blob.core.windows.net/imagenes/proyecto1_2.jpg?sp=r&st=2024-10-15T00:39:55Z&se=2024-12-07T08:39:55Z&sv=2022-11-02&sr=b&sig=3gPQEwEjKiTnP9aTqRE1wBxcmHEj528Zm8QtJ1bN2Yw%3D" alt="Proyecto 1 Imagen 2">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="https://dmmblobstorage.blob.core.windows.net/imagenes/proyecto1_3.jpg?sp=r&st=2024-10-15T00:40:42Z&se=2024-12-07T08:40:42Z&sv=2022-11-02&sr=b&sig=TPBK50fuz3Isj9oz40cArFAtMxyokSHs9%2B3iQoNB58k%3D" alt="Proyecto 1 Imagen 3">
+                        </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ proyecto.id }}" data-bs-slide="prev">
+                    <a class="carousel-control-prev" href="#carouselProyecto1" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ proyecto.id }}" data-bs-slide="next">
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselProyecto1" role="button" data-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                        <span class="sr-only">Siguiente</span>
+                    </a>
                 </div>
-                <!-- Fin del Carrusel -->
-                
                 <div class="card-body">
-                    <h5 class="card-title">{{ proyecto.nombre }}</h5>
-                    <p class="card-text">{{ proyecto.descripcion }}</p>
+                    <h5 class="card-title">Curso cestería</h5>
+                    <p class="card-text">DMM le da repuesta al eje No.2 Educación y el eje No. 4 eje de Desarrollo Económico y Productivo con Equidad, integrada en la Política Municipal de la Mujer.
+                        Nuestro objetivo es poder empoderar a las mujeres en crear nuevas oportunidades de ingreso económico y mejorar la calidad de vida en sus hogares.
+                        ¡ SIGAMOS ADELANTE !.</p>
                 </div>
             </div>
         </div>
-        {% endfor %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div id="carouselProyecto2" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" src="https://dmmblobstorage.blob.core.windows.net/imagenes/proyecto2_1.jpg?sp=r&st=2024-10-15T00:41:54Z&se=2024-12-07T08:41:54Z&sv=2022-11-02&sr=b&sig=XugqgIPzT%2FWQpoBOtessgk8rH4p8L3Dn1aPlflWmjDY%3D" alt="Proyecto 2 Imagen 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="https://dmmblobstorage.blob.core.windows.net/imagenes/proyecto2_2.jpg?sp=r&st=2024-10-15T00:42:51Z&se=2024-12-07T08:42:51Z&sv=2022-11-02&sr=b&sig=pJPA7agBzxF6WrINQop7sm4Of5W0%2BJSg3jAHkLWs7Zs%3D" alt="Proyecto 2 Imagen 2">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="https://dmmblobstorage.blob.core.windows.net/imagenes/proyecto2_3.jpg?sp=r&st=2024-10-15T00:44:34Z&se=2024-12-07T08:44:34Z&sv=2022-11-02&sr=b&sig=uM%2F8%2FIMym25b6Pf%2BCSUBOQJDLQtb19uiea3GFUQ1g9Y%3D" alt="Proyecto 2 Imagen 2">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselProyecto2" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselProyecto2" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Siguiente</span>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Curso Elaboración De Quesos Artesanales</h5>
+                    <p class="card-text">En la granja de Doña María, mujeres rurales aprenden a elaborar quesos artesanales con leche de cabra y hierbas aromáticas, rescatando recetas ancestrales.en conjunto con la #DMM y #FUNDAP  ¡ SIGAMOS ADELANTE !.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div id="carouselProyecto3" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" src="https://dmmblobstorage.blob.core.windows.net/imagenes/proyecto3_1.jpg?sp=r&st=2024-10-15T00:48:02Z&se=2024-12-07T08:48:02Z&sv=2022-11-02&sr=b&sig=3yl3%2FvcFJvGfUbHExbxUpa14R07oNEneVIQfDO8O0To%3D" alt="Proyecto 3 Imagen 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="https://dmmblobstorage.blob.core.windows.net/imagenes/proyecto3_2.jpg?sp=r&st=2024-10-15T00:48:56Z&se=2024-12-07T08:48:56Z&sv=2022-11-02&sr=b&sig=BejSOzWp5nq9tgn%2BH%2BGz3veK2KM9lOSFJj0I8cTZ304%3D" alt="Proyecto 3 Imagen 2">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="https://dmmblobstorage.blob.core.windows.net/imagenes/proyecto3_3.jpg?sp=r&st=2024-10-15T00:49:47Z&se=2024-12-07T08:49:47Z&sv=2022-11-02&sr=b&sig=IKUHqJm5jkRFWnpF%2FJXrnSLNna4gQroHpRPpYRK4H2c%3D" alt="Proyecto 3 Imagen 2">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselProyecto3" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselProyecto3" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Siguiente</span>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Curso Repostería</h5>
+                    <p class="card-text">La Dirección Municipal de la Mujer en coordinación con la Organización IXMUXANE da inició el Curso de REPOSTERÍA BÁSICA ejecutado por INTECAP esto con el objetivo de mejorar los ingresos económicos de las participantes y el de sus familias. 
+
+                        ¡Trabajando por el desarrollo Integral de nuestras comunidades.!
+                        </p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 
 <!-- Sección de Tracking de Proyectos -->
 <div class="container my-5">
-    <h2>Tracking de Proyectos en Curso</h2>
-    <p>A continuación, se muestra el estado de los proyectos que se están llevando a cabo actualmente:</p>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nombre del Proyecto</th>
-                <th>Estado</th>
-                <th>Inicio</th>
-                <th>Fecha Estimada de Finalización</th>
-                <th>Avance</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for proyecto in tracking_proyectos %}
-            <tr>
-                <td>{{ proyecto.nombre }}</td>
-                <td>{{ proyecto.estado }}</td>
-                <td>{{ proyecto.inicio }}</td>
-                <td>{{ proyecto.fin_estimado }}</td>
-                <td>{{ proyecto.avance }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h2 class="text-center">Tracking de Proyectos en Curso</h2>
+    <p class="text-center">Estado actual de los proyectos que se están llevando a cabo actualmente:</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre del Proyecto</th>
+                    <th>Estado</th>
+                    <th>Inicio</th>
+                    <th>Fecha Estimada de Finalización</th>
+                    <th>Avance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proyecto in proyectos %}
+                <tr>
+                    <td>{{ proyecto.nombre }}</td>
+                    <td>{{ proyecto.estado }}</td>
+                    <td>{{ proyecto.fecha_inicio }}</td>
+                    <td>{{ proyecto.fecha_fin }}</td>
+                    <td>{{ proyecto.avance }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
 
 <!-- Sección de Contacto -->
 <div class="container my-5">
-    <h2>Contacto</h2>
-    <p>Para más información sobre el proyecto, puedes contactarnos a través de los siguientes medios:</p>
-    <ul>
-        <li>Email: contacto@dmm.com</li>
-        <li>Teléfono: +502 30670413</li>
-        <li>Dirección: Totonicapán </li>
+    <h2 class="text-center">Contacto</h2>
+    <p class="text-center">Para más información sobre los proyectos, contáctanos:</p>
+    <ul class="list-unstyled text-center">
+        <li><strong>Email:</strong> <a href="mailto:contacto@dmm.com">contacto@dmm.com</a></li>
+        <li><strong>Teléfono:</strong> +502 30670413</li>
+        <li><strong>Dirección:</strong> Totonicapán, Guatemala</li>
     </ul>
 </div>
 
