@@ -91,8 +91,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'DMM',
         'USER': 'postgres',
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': 'localhost',
+        'PASSWORD': 'Mayerly123',
+        'HOST': 'dmm.cbmoyyuc8kkq.us-west-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
