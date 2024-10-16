@@ -174,7 +174,7 @@ EMAIL_HOST_PASSWORD = 'xyqv klbj hshf ezjk'
 DEFAULT_FROM_EMAIL = 'dmmtotonicapan@gmail.com'  
 EMAIL_USE_OAUTH2 = True  
 
-DEFAULT_DOMAIN = 'https://pdrh02gj-8000.use2.devtunnels.ms/'
+DEFAULT_DOMAIN = 'https://dmmtotonicapan.online'
 
 # Configura el protocolo (http para desarrollo, https para producción)
 DEFAULT_PROTOCOL = 'https'
@@ -183,5 +183,7 @@ PASSWORD_RESET_TIMEOUT = 60 * 60 * 24 * 3  # 3 días en segundos  # Tiempo que d
 EMAIL_USE_SSL = False  # Solo si estás usando HTTPS, de lo contrario es False
 
 SITE_ID = 1
+
+CSRF_TRUSTED_ORIGINS = ['https://dmmtotonicapan.online', 'https://www.dmmtotonicapan.online']
 
 
