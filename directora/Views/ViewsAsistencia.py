@@ -19,7 +19,7 @@ def obtener_rol(user):
 @login_required
 def menu_asistencia(request):
     rol = obtener_rol(request.user)
-    return render(request, 'directora/asistencia/menu_asistencia.html', {'rol': rol})
+    return render(request, 'directora/Asistencia/menu_asistencia.html', {'rol': rol})
 
 # Vista para registrar la entrada con el rol del usuario
 @login_required
@@ -40,7 +40,7 @@ def registrar_entrada(request):
         )
         mensaje = 'Entrada registrada correctamente' if created else 'Ya has registrado tu entrada para hoy'
     
-    return render(request, 'directora/asistencia/registrar_entrada.html', {'mensaje': mensaje, 'rol': rol})
+    return render(request, 'directora/Asistencia/registrar_entrada.html', {'mensaje': mensaje, 'rol': rol})
 
 # Vista para registrar la salida con el rol del usuario
 @login_required
@@ -68,9 +68,9 @@ def registrar_salida(request):
         except Asistencia.DoesNotExist:
             mensaje = 'No se encontró un registro de entrada para hoy. Registre su entrada antes de salir.'
         
-        return render(request, 'directora/asistencia/registrar_salida.html', {'mensaje': mensaje, 'rol': rol})
+        return render(request, 'directora/Asistencia/registrar_salida.html', {'mensaje': mensaje, 'rol': rol})
     
-    return render(request, 'directora/asistencia/registrar_salida.html', {'mensaje': mensaje, 'rol': rol})
+    return render(request, 'directora/Asistencia/registrar_salida.html', {'mensaje': mensaje, 'rol': rol})
 
 
 @login_required
@@ -85,7 +85,7 @@ def historial_asistencia(request):
         asistencias = Asistencia.objects.filter(empleado=request.user).order_by('-fecha')
 
     # Renderizar la plantilla con los registros de asistencia y el rol
-    return render(request, 'directora/asistencia/historial_asistencia.html', {
+    return render(request, 'directora/Asistencia/historial_asistencia.html', {
         'asistencias': asistencias,
         'rol': rol
     })
