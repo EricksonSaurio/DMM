@@ -9,8 +9,16 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 icon: messageType === 'success' ? 'success' : 'error',
                 title: messageText,
-                showConfirmButton: false,
-                timer: 2000
+                showConfirmButton: true,  // Mostrar botón OK
+                confirmButtonText: 'OK'
+            }).then(function(result) {
+                // Verificar si el SweetAlert fue confirmado
+                if (result.isConfirmed) {
+                    // Si es un mensaje de éxito, redirigimos a listar empleados
+                    if (messageType === 'success') {
+                        window.location.href = '/directora/empleados/';  // Cambia la URL según corresponda
+                    }
+                }
             });
         });
     } 

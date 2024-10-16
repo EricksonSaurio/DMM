@@ -180,7 +180,7 @@ DEFAULT_DOMAIN = 'https://dmmtotonicapan.online'
 DEFAULT_PROTOCOL = 'https'
 # Configurar el dominio y protocolo que se usarán para los correos
 PASSWORD_RESET_TIMEOUT = 60 * 60 * 24 * 3  # 3 días en segundos  # Tiempo que dura el enlace antes de expirar
-EMAIL_USE_SSL = False  # Solo si estás usando HTTPS, de lo contrario es False
+EMAIL_USE_SSL = True  # Solo si estás usando HTTPS, de lo contrario es False
 
 SITE_ID = 1
 

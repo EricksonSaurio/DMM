@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (result.isConfirmed) {
                     // Si es un mensaje de éxito, redirigimos a listar empleados
                     if (messageType === 'success') {
-                        window.location.href = '/directora/empleados/';  // Cambia la URL según corresponda
+                        window.location.href = '/directora/menu_tareas/';  // Cambia la URL según corresponda
                     }
                 }
             });
