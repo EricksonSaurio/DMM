@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-xz8xw2c@a5lw*)mff3&0$j4b5*%hsa$e6*iijyng&7z#^7oho&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['dmmtotonicapan.online', 'www.dmmtotonicapan.online', '54.151.13.144']
+ALLOWED_HOSTS = ['dmmtotonicapan.online', 'www.dmmtotonicapan.online', '54.176.153.158']
 
 
 # Application definition
